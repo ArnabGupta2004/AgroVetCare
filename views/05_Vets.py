@@ -39,7 +39,7 @@ if st.session_state.get("screen_width") is None:
     st.session_state.screen_width = 150  # Default width if we can't detect
 
 # Input to dynamically change map width, detecting mobile screen size
-map_width = 300
+map_width = 320
 map_height = 500  # Set a fixed height
 
 # Display the map with dynamic width for mobile responsiveness
