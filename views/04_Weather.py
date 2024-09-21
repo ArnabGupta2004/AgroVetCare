@@ -32,7 +32,7 @@ def check_for_severe_weather(forecast_data):
     for entry in forecast_data['list']:
         weather_desc = entry['weather'][0]['description'].lower()
         if any(condition in weather_desc for condition in severe_conditions):
-            date = datetime.datetime.fromtimestamp(entry['dt']).strftime('%d-%m-%Y %H:%M:%S')
+            date = datetime.datetime.fromtimestamp(entry['dt']).strftime('%d-%m-%Y *(%H:%M:%S)*')
             alerts.append(f"On {date} : {weather_desc.title()}")
 
     return alerts
