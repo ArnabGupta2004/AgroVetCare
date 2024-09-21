@@ -68,16 +68,13 @@ def display_forecast(forecast_data, city):
         st.error("No forecast data available to display.")
         return
 
-    # Check for severe weather alerts
-    if st.button("Upcoming Alerts"):
-        alerts = check_for_severe_weather(forecast_data)
-        # Save alerts in session state to persist across rerenders
-        st.session_state['alerts'] = alerts
-    
-    # Display alerts stored in session state
-    if 'alerts' in st.session_state and st.session_state['alerts']:
+    # Check for severe weather alerts automatically
+    alerts = check_for_severe_weather(forecast_data)
+
+    # Display alerts
+    if alerts:
         st.write("### Weather Alerts")
-        for alert in st.session_state['alerts']:
+        for alert in alerts:
             st.write(alert)
     else:
         st.write("### No severe weather alerts in the forecast.")
@@ -108,3 +105,4 @@ forecast_data = get_weather_forecast(lat, lon)
 
 # Display the forecast
 display_forecast(forecast_data, city)
+
