@@ -4,7 +4,7 @@ import requests
 import datetime
 
 # OpenWeather API key
-API_KEY = '6fa105bb23df102a78770e15ace55ffc'
+API_KEY = st.secrets["openweather"]["api_key"]
 
 # Function to get user's current location (using ipinfo.io)
 def get_location():
