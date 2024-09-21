@@ -36,7 +36,7 @@ for shop in shops:
 
 # Get the screen width to adjust the map size dynamically for mobile responsiveness
 if st.session_state.get("screen_width") is None:
-    st.session_state.screen_width = 300  # Default width if we can't detect
+    st.session_state.screen_width = 150  # Default width if we can't detect
 
 # Input to dynamically change map width, detecting mobile screen size
 map_width = st.session_state.screen_width if st.session_state.screen_width < 800 else 800
