@@ -24,7 +24,6 @@ def get_weather_forecast(lat, lon):
     return response.json()
 
 # Function to check for severe weather alerts
-
 def check_for_severe_weather(forecast_data):
     severe_conditions = ['storm', 'rain', 'thunderstorm', 'hail', 'snow']
     alerts = []
@@ -70,15 +69,18 @@ def display_forecast(forecast_data, city):
         return
 
     # Check for severe weather alerts
-    if(st.button("Upcoming Alerts")):
+    if st.button("Upcoming Alerts"):
         alerts = check_for_severe_weather(forecast_data)
-        
-        if alerts:
-            st.write("### Weather Alerts")
-            for alert in alerts:
-                st.write(alert)
-        else:
-            st.write("### No severe weather alerts in the forecast.")
+        # Save alerts in session state to persist across rerenders
+        st.session_state['alerts'] = alerts
+    
+    # Display alerts stored in session state
+    if 'alerts' in st.session_state and st.session_state['alerts']:
+        st.write("### Weather Alerts")
+        for alert in st.session_state['alerts']:
+            st.write(alert)
+    else:
+        st.write("### No severe weather alerts in the forecast.")
 
     # Display 5-day weather forecast
     daily_forecast = aggregate_daily_forecast(forecast_data)
