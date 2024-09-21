@@ -4,4 +4,3 @@ datetime
 tensorflow
 numpy
 streamlit_option_menu
-folium
