@@ -1,4 +1,3 @@
-#API_KEY = "6fa105bb23df102a78770e15ace55ffc"
 import streamlit as st
 import requests
 import datetime
