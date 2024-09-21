@@ -1,0 +1,8 @@
+streamlit
+requests
+datetime
+tensorflow
+numpy
+streamlit_option_menu
+urllib.parse
+folium
