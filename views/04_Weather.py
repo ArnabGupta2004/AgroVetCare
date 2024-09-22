@@ -35,7 +35,7 @@ def check_for_severe_weather(forecast_data):
             date = datetime.datetime.fromtimestamp(entry['dt']).strftime('%d-%m-%Y %H:%M:%S')
             alert_message = f"On {date}: {weather_desc.title()}"
             alerts.append(alert_message)
-            st.write(f"Debug Alert Added: {alert_message}")  # Debugging line
+            #st.write(f"Debug Alert Added: {alert_message}")  # Debugging line
 
     return alerts
 
