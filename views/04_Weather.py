@@ -70,7 +70,7 @@ def display_forecast(forecast_data, city):
         return
 
     # Check for severe weather alerts
-    if(st.button("Upcoming Alerts")):
+    with st.expander("Upcoming Alerts"):
         alerts = check_for_severe_weather(forecast_data)
         
         if alerts:
