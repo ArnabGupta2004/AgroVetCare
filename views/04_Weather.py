@@ -32,8 +32,8 @@ def check_for_severe_weather(forecast_data):
     for entry in forecast_data['list']:
         weather_desc = entry['weather'][0]['description'].lower()
         if any(condition in weather_desc for condition in severe_conditions):
-            date = datetime.datetime.fromtimestamp(entry['dt']).strftime('%d-%m-%Y **(%H:%M:%S)**')
-            alerts.append(f"On {date} : {weather_desc.title()}")
+            date = datetime.datetime.fromtimestamp(entry['dt']).strftime('%d-%m-%Y %H:%M:%S')
+            alerts.append(f"On {date}: {weather_desc.title()}")
 
     return alerts
 
@@ -71,14 +71,14 @@ def display_forecast(forecast_data, city):
 
     # Check for severe weather alerts
     with st.expander("Upcoming Alerts"):
-        alerts = check_for_severe_weather(forecast_data)
-        
-        if alerts:
-            st.write("### Weather Alerts")
-            for alert in alerts:
-                st.write(alert)
-        else:
-            st.write("### No severe weather alerts in the forecast.")
+    alerts = check_for_severe_weather(forecast_data)
+
+    if alerts:
+        st.write("### Weather Alerts")
+        for alert in alerts:
+            st.write(alert)  # Display all alerts here
+    else:
+        st.write("### No severe weather alerts in the forecast.")
 
     # Display 5-day weather forecast
     daily_forecast = aggregate_daily_forecast(forecast_data)
