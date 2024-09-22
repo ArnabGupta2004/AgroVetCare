@@ -33,12 +33,9 @@ def check_for_severe_weather(forecast_data):
         weather_desc = entry['weather'][0]['description'].lower()
         if any(condition in weather_desc for condition in severe_conditions):
             date = datetime.datetime.fromtimestamp(entry['dt']).strftime('%d-%m-%Y %H:%M:%S')
-            alert_message = f"On {date}: {weather_desc.title()}"
-            alerts.append(alert_message)
-            #st.write(f"Debug Alert Added: {alert_message}")  # Debugging line
+            alerts.append(f"On {date} : {weather_desc.title()}")
 
     return alerts
-
 
 # Function to aggregate the 5-day 3-hour forecast into daily summaries
 def aggregate_daily_forecast(forecast_data):
@@ -46,7 +43,7 @@ def aggregate_daily_forecast(forecast_data):
     daily_forecast = {}
     
     for entry in forecast_data['list']:
-        date = datetime.datetime.fromtimestamp(entry['dt']).strftime('%d-%m-%Y')
+        date = datetime.datetime.fromtimestamp(entry['dt']).strftime('%Y-%m-%d')
         temp = entry['main']['temp']
         weather_desc = entry['weather'][0]['description'].title()
         icon_code = entry['weather'][0]['icon']
@@ -75,11 +72,11 @@ def display_forecast(forecast_data, city):
     # Check for severe weather alerts
     with st.expander("Upcoming Alerts"):
         alerts = check_for_severe_weather(forecast_data)
-       
+        
         if alerts:
             st.write("### Weather Alerts")
             for alert in alerts:
-                st.write(alert)  # Display all alerts here
+                st.write(alert)
         else:
             st.write("### No severe weather alerts in the forecast.")
 
@@ -109,4 +106,3 @@ forecast_data = get_weather_forecast(lat, lon)
 
 # Display the forecast
 display_forecast(forecast_data, city)
-
