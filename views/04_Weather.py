@@ -71,14 +71,14 @@ def display_forecast(forecast_data, city):
 
     # Check for severe weather alerts
     with st.expander("Upcoming Alerts"):
-    alerts = check_for_severe_weather(forecast_data)
-
-    if alerts:
-        st.write("### Weather Alerts")
-        for alert in alerts:
-            st.write(alert)  # Display all alerts here
-    else:
-        st.write("### No severe weather alerts in the forecast.")
+        alerts = check_for_severe_weather(forecast_data)
+    
+        if alerts:
+            st.write("### Weather Alerts")
+            for alert in alerts:
+                st.write(alert)  # Display all alerts here
+        else:
+            st.write("### No severe weather alerts in the forecast.")
 
     # Display 5-day weather forecast
     daily_forecast = aggregate_daily_forecast(forecast_data)
