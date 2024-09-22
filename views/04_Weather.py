@@ -33,6 +33,7 @@ def check_for_severe_weather(forecast_data):
         if any(condition in weather_desc for condition in severe_conditions):
             date = datetime.datetime.fromtimestamp(entry['dt']).strftime('%d-%m-%Y %H:%M:%S')
             alerts.append(f"On {date}: {weather_desc.title()}")
+            st.write(f"Debug Alert: {alerts[-1]}")  # Debugging line
 
     return alerts
 
@@ -67,19 +68,19 @@ def display_forecast(forecast_data, city):
         st.error("No forecast data available to display.")
         return
 
-    # Check for severe weather alerts and store them in session state
     if "alerts" not in st.session_state:
         st.session_state.alerts = []
 
-    new_alerts = check_for_severe_weather(forecast_data)
-    st.session_state.alerts = new_alerts  # Update alerts in session state
+    # Update alerts on refresh
+    if st.button("Refresh Alerts"):
+        st.session_state.alerts = check_for_severe_weather(forecast_data)
 
     # Display alerts
-    with st.expander("Upcoming Alerts"):
+    with st.expander("Upcoming Alerts", expanded=True):
         if st.session_state.alerts:
             st.write("### Weather Alerts")
             for alert in st.session_state.alerts:
-                st.write(alert)  # Display all alerts here
+                st.write(alert)
         else:
             st.write("### No severe weather alerts in the forecast.")
 
