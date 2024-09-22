@@ -72,7 +72,7 @@ def display_forecast(forecast_data, city):
     # Check for severe weather alerts
     with st.expander("Upcoming Alerts"):
         alerts = check_for_severe_weather(forecast_data)
-    
+        st.write(alerts)
         if alerts:
             st.write("### Weather Alerts")
             for alert in alerts:
