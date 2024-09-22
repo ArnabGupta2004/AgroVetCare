@@ -91,7 +91,7 @@ if dr_ch == "Crop":
     st.header("Crop Disease Recognition")
     test_image = st.file_uploader("Choose an Image:")
     if test_image:
-        st.image(test_image, width=400, use_column_width=True)
+        st.image(test_image, width=100, use_column_width=True)
         if st.button("Predict"):
             with st.spinner("Please Wait...."):
                 result_index = crop_model_prediction(test_image)
@@ -115,7 +115,7 @@ if dr_ch == "LiveStock":
     st.header("Livestock Disease Recognition")
     test_image = st.file_uploader("Choose an Image:")
     if test_image:
-        st.image(test_image, width=400, use_column_width=True)
+        st.image(test_image, width=200, use_column_width=True)
         if st.button("Predict"):
             with st.spinner("Please Wait...."):
                 result_index = livestock_model_prediction(test_image)
