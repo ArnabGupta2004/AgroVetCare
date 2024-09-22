@@ -91,7 +91,7 @@ if dr_ch == "Crop":
     st.header("Crop Disease Recognition")
     test_image = st.file_uploader("Choose an Image:")
     if test_image:
-        st.image(test_image, width=100, use_column_width=True)
+        st.image(test_image, width=100)
         if st.button("Predict"):
             with st.spinner("Please Wait...."):
                 result_index = crop_model_prediction(test_image)
@@ -106,7 +106,7 @@ if dr_ch == "Crop":
                     st.markdown(f"[Find Cure for {predicted_disease}]({cure_link})")
                     
                     # Additional buttons
-                    st.button("Visit Marketplace", on_click=lambda: st.write("[Visit Amazon Marketplace](https://www.amazon.com)"))
+                    st.button("Visit Marketplace", on_click=lambda: st.write("[Visit Amazon Marketplace](https://www.amazon.in)"))
                     st.button("Contact Experts", on_click=lambda: st.write("To be introduced"))
                 else:
                     st.error(f"Prediction '{predicted_disease}' is not found in the cure dictionary.")
@@ -115,7 +115,7 @@ if dr_ch == "LiveStock":
     st.header("Livestock Disease Recognition")
     test_image = st.file_uploader("Choose an Image:")
     if test_image:
-        st.image(test_image, width=200, use_column_width=True)
+        st.image(test_image, width=200)
         if st.button("Predict"):
             with st.spinner("Please Wait...."):
                 result_index = livestock_model_prediction(test_image)
