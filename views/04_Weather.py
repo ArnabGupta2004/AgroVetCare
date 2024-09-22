@@ -102,7 +102,7 @@ def display_forecast(forecast_data, city):
 st.title("Weather Alerts")
 
 # User input for city
-city = st.text_input("Enter your city:", value="Your City")
+city = st.text_input("Enter your city:")
 
 if st.button("Get Weather"):
     if city:
