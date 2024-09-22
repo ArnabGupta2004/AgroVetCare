@@ -89,9 +89,17 @@ dr_ch = option_menu(
 
 if dr_ch == "Crop":
     st.header("Crop Disease Recognition")
-    test_image = st.file_uploader("Choose an Image:")
+
+    # Option to upload an image or take a photo from the camera
+    option = st.radio("Choose Image Source:", ("Upload Image", "Take Photo with Camera"))
+
+    if option == "Upload Image":
+        test_image = st.file_uploader("Choose an Image:")
+    else:
+        test_image = st.camera_input("Take a photo:")
+
     if test_image:
-        st.image(test_image, width=200)
+        st.image(test_image, width=200)  # Display the image
         if st.button("Predict"):
             with st.spinner("Please Wait...."):
                 result_index = crop_model_prediction(test_image)
@@ -113,9 +121,17 @@ if dr_ch == "Crop":
 
 if dr_ch == "LiveStock":
     st.header("Livestock Disease Recognition")
-    test_image = st.file_uploader("Choose an Image:")
+
+    # Option to upload an image or take a photo from the camera
+    option = st.radio("Choose Image Source:", ("Upload Image", "Take Photo with Camera"))
+
+    if option == "Upload Image":
+        test_image = st.file_uploader("Choose an Image:")
+    else:
+        test_image = st.camera_input("Take a photo:")
+
     if test_image:
-        st.image(test_image, width=200)
+        st.image(test_image, width=200)  # Display the image
         if st.button("Predict"):
             with st.spinner("Please Wait...."):
                 result_index = livestock_model_prediction(test_image)
@@ -134,3 +150,4 @@ if dr_ch == "LiveStock":
                     st.button("Contact Experts", on_click=lambda: st.write("To be introduced"))
                 else:
                     st.error(f"Prediction '{predicted_disease}' is not found in the cure dictionary.")
+
