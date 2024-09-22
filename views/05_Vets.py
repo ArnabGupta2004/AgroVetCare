@@ -46,7 +46,10 @@ map_height = 500  # Set a fixed height
 st.header("Map of Nearby Vets and Medicine Shops")
 folium_static(m, width=map_width, height=map_height)
 
-st.write("🔵➜ Your Location 🔴➜ Vets 🟢➜ Medicines")
+st.markdown("""🔵➜ Your Location  
+🔴➜ Vets  
+🟢➜ Medicines  
+""")
 
 # Button to trigger the pop-up
 if st.button("Add Your Store"):
