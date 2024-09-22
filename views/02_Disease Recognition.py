@@ -91,7 +91,7 @@ if dr_ch == "Crop":
     st.header("Crop Disease Recognition")
     test_image = st.file_uploader("Choose an Image:")
     if test_image:
-        st.image(test_image, width=100)
+        st.image(test_image, width=200)
         if st.button("Predict"):
             with st.spinner("Please Wait...."):
                 result_index = crop_model_prediction(test_image)
