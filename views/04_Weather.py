@@ -24,7 +24,6 @@ def get_weather_forecast(lat, lon):
     return response.json()
 
 # Function to check for severe weather alerts
-
 def check_for_severe_weather(forecast_data):
     severe_conditions = ['storm', 'rain', 'thunderstorm', 'hail', 'snow']
     alerts = []
@@ -39,7 +38,6 @@ def check_for_severe_weather(forecast_data):
 
 # Function to aggregate the 5-day 3-hour forecast into daily summaries
 def aggregate_daily_forecast(forecast_data):
-    # Aggregating data into daily summaries
     daily_forecast = {}
     
     for entry in forecast_data['list']:
@@ -69,13 +67,18 @@ def display_forecast(forecast_data, city):
         st.error("No forecast data available to display.")
         return
 
-    # Check for severe weather alerts
+    # Check for severe weather alerts and store them in session state
+    if "alerts" not in st.session_state:
+        st.session_state.alerts = []
+
+    new_alerts = check_for_severe_weather(forecast_data)
+    st.session_state.alerts = new_alerts  # Update alerts in session state
+
+    # Display alerts
     with st.expander("Upcoming Alerts"):
-        alerts = check_for_severe_weather(forecast_data)
-    
-        if alerts:
+        if st.session_state.alerts:
             st.write("### Weather Alerts")
-            for alert in alerts:
+            for alert in st.session_state.alerts:
                 st.write(alert)  # Display all alerts here
         else:
             st.write("### No severe weather alerts in the forecast.")
@@ -106,4 +109,3 @@ forecast_data = get_weather_forecast(lat, lon)
 
 # Display the forecast
 display_forecast(forecast_data, city)
-
