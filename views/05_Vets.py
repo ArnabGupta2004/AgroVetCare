@@ -53,7 +53,7 @@ st.markdown("""🔵➜ Your Location
 
 # Button to trigger the pop-up
     # Simulated pop-up using an expander
-with st.expander("Add Store", expanded=True):
+with st.expander("Add Store"):
     st.write("Enter Store Details")
     st.text_input("Enter Store Name:")
     st.text_input("Enter Store Location:")
