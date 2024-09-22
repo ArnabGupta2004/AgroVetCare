@@ -4,7 +4,7 @@ st.title("About")
 st.markdown("""
             #### About Dataset
             This dataset is recreated using offline augmentation from the original dataset.
-            This dataset consists of about 90K rgb images of healthy and diseased Crop leaves and Livestock(only cows due to unavailabilty of good quality dataset) which is categorized into 45 different classes.The total dataset is divided into 80/20 ratio of training and validation set preserving the directory structure.
+            This dataset consists of about **90K** rgb images of healthy and diseased Crop leaves and Livestock *(only cows due to unavailabilty of good quality dataset)* which is categorized into 45 different classes.The total dataset is divided into 80/20 ratio of training and validation set preserving the directory structure.
             #### Content
             """)
 tab1, tab2 = st.tabs(["Crops", "Livestocks"])
