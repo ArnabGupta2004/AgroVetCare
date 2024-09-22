@@ -41,7 +41,7 @@ def aggregate_daily_forecast(forecast_data):
     daily_forecast = {}
     
     for entry in forecast_data['list']:
-        date = datetime.datetime.fromtimestamp(entry['dt']).strftime('%Y-%m-%d')
+        date = datetime.datetime.fromtimestamp(entry['dt']).strftime('%d-%m-%Y')
         temp = entry['main']['temp']
         weather_desc = entry['weather'][0]['description'].title()
         icon_code = entry['weather'][0]['icon']
