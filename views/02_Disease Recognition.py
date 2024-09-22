@@ -79,6 +79,14 @@ def livestock_model_prediction(test_image):
 
 st.title("Disease Recognition")
 
+dr_ch = option_menu(
+    menu_title=None,
+    options=["Crop", "LiveStock"],
+    icons=["square-fill", "square-fill"],
+    default_index=0,
+    orientation="horizontal"
+)
+
 if dr_ch == "Crop":
     st.header("Crop Disease Recognition")
     test_image = st.file_uploader("Choose an Image:")
