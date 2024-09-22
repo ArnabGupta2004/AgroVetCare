@@ -79,27 +79,11 @@ def livestock_model_prediction(test_image):
 
 st.title("Disease Recognition")
 
-dr_ch = option_menu(
-    menu_title=None,
-    options=["Crop", "LiveStock"],
-    icons=["square-fill", "square-fill"],
-    default_index=0,
-    orientation="horizontal"
-)
-
 if dr_ch == "Crop":
     st.header("Crop Disease Recognition")
-
-    # Option to upload an image or take a photo from the camera
-    option = st.radio("Choose Image Source:", ("Upload Image", "Take Photo with Camera"))
-
-    if option == "Upload Image":
-        test_image = st.file_uploader("Choose an Image:")
-    else:
-        test_image = st.camera_input("Take a photo:")
-
+    test_image = st.file_uploader("Choose an Image:")
     if test_image:
-        st.image(test_image, width=200)  # Display the image
+        st.image(test_image, width=200)
         if st.button("Predict"):
             with st.spinner("Please Wait...."):
                 result_index = crop_model_prediction(test_image)
@@ -114,24 +98,27 @@ if dr_ch == "Crop":
                     st.markdown(f"[Find Cure for {predicted_disease}]({cure_link})")
                     
                     # Additional buttons
-                    st.button("Visit Marketplace", on_click=lambda: st.write("[Visit Amazon Marketplace](https://www.amazon.in)"))
-                    st.button("Contact Experts", on_click=lambda: st.write("To be introduced"))
+                    with st.expander("Visit Marketplace"):
+                        st.markdown("[Visit Amazon Marketplace](https://www.amazon.in)")
+
+                    with st.expander("Contact Experts"):
+                        st.markdown("""
+Name : **Abc**  
+Contact : *xxxxxxxxxx*  
+Status : :green[Available]   
+                                    
+Name : **Xyz**  
+Contact : *xxxxxxxxxx*  
+Status : :red[Unavailable]  
+""")
                 else:
                     st.error(f"Prediction '{predicted_disease}' is not found in the cure dictionary.")
 
 if dr_ch == "LiveStock":
     st.header("Livestock Disease Recognition")
-
-    # Option to upload an image or take a photo from the camera
-    option = st.radio("Choose Image Source:", ("Upload Image", "Take Photo with Camera"))
-
-    if option == "Upload Image":
-        test_image = st.file_uploader("Choose an Image:")
-    else:
-        test_image = st.camera_input("Take a photo:")
-
+    test_image = st.file_uploader("Choose an Image:")
     if test_image:
-        st.image(test_image, width=200)  # Display the image
+        st.image(test_image, width=200)
         if st.button("Predict"):
             with st.spinner("Please Wait...."):
                 result_index = livestock_model_prediction(test_image)
@@ -146,8 +133,20 @@ if dr_ch == "LiveStock":
                     st.markdown(f"[Find Cure for {predicted_disease}]({cure_link})")
                     
                     # Additional buttons
-                    st.button("Visit Marketplace", on_click=lambda: st.write("[Visit Amazon Marketplace](https://www.amazon.com)"))
-                    st.button("Contact Experts", on_click=lambda: st.write("To be introduced"))
+                    with st.expander("Visit Marketplace"):
+                        st.markdown("[Visit Amazon Marketplace](https://www.amazon.in)")
+
+                    with st.expander("Contact Experts"):
+                        st.markdown("""
+Name : **Abc**  
+Contact : *xxxxxxxxxx*  
+Status : :green[Available]   
+                                    
+Name : **Xyz**  
+Contact : *xxxxxxxxxx*  
+Status : :red[Unavailable]  
+""")
+
+                    
                 else:
                     st.error(f"Prediction '{predicted_disease}' is not found in the cure dictionary.")
-
