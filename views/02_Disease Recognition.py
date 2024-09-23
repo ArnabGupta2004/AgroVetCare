@@ -160,7 +160,7 @@ if dr_ch == "LiveStock":
                         st.markdown("---")  # Horizontal separator
                         
                         # Expert 2
-                        col1, col2 = st.columns([2, 1])  # 3:1 ratio for left and right columns
+                        col1, col2 = st.columns([1, 2])  # 3:1 ratio for left and right columns
                         with col1:
                             st.markdown("""
                             **Name**: Xyz  
