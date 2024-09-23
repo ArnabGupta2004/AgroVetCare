@@ -113,11 +113,11 @@ if dr_ch == "Crop":
                         st.markdown("""
 Name : **Abc**  
 Contact : *xxxxxxxxxx*  
-Status : :green[Available]   
+Status : :green[Online]   
                                     
 Name : **Xyz**  
-Contact : *xxxxxxxxxx*  
-Status : :red[Unavailable]  
+Contact : f"[Call {phone_number}](tel:{phone_number})  
+Status : :red[Offline]  
 """)
                 else:
                     st.error(f"Prediction '{predicted_disease}' is not found in the cure dictionary.")
