@@ -148,11 +148,11 @@ if dr_ch == "LiveStock":
                         st.markdown("""
 Name : **Abc**  
 Contact : [9876543211](tel:9876543211)  
-Status : :green[Available]   
+Status : :green[Online]   
                                     
 Name : **Xyz**  
 Contact : [1234567899](tel:1234567899)  
-Status : :red[Unavailable]  
+Status : :red[Offline]  
 """)
 
                     
