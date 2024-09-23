@@ -112,11 +112,11 @@ if dr_ch == "Crop":
                     with st.expander("Contact Experts"):
                         st.markdown("""
 Name : **Abc**  
-Contact : *xxxxxxxxxx*  
+Contact : [9876543211](tel:9876543211)  
 Status : :green[Online]   
                                     
 Name : **Xyz**  
-Contact : f"[Call 9330931582](tel:9330931582)  
+Contact : [1234567899](tel:1234567899)  
 Status : :red[Offline]  
 """)
                 else:
@@ -147,11 +147,11 @@ if dr_ch == "LiveStock":
                     with st.expander("Contact Experts"):
                         st.markdown("""
 Name : **Abc**  
-Contact : *xxxxxxxxxx*  
+Contact : [9876543211](tel:9876543211)  
 Status : :green[Available]   
                                     
 Name : **Xyz**  
-Contact : *xxxxxxxxxx*  
+Contact : [1234567899](tel:1234567899)  
 Status : :red[Unavailable]  
 """)
 
