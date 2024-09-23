@@ -145,15 +145,30 @@ if dr_ch == "LiveStock":
                         st.markdown("[Visit Amazon Marketplace](https://www.amazon.in)")
 
                     with st.expander("Contact Experts"):
-                        st.markdown("""
-Name : **Abc**  
-Contact : [9876543211](tel:9876543211)  
-Status : :green[Online]   
-                                    
-Name : **Xyz**  
-Contact : [1234567899](tel:1234567899)  
-Status : :red[Offline]  
-""")
+                        
+                        # Expert 1
+                        col1, col2 = st.columns([3, 1])  # 3:1 ratio for left and right columns
+                        with col1:
+                            st.markdown("""
+                            **Name**: Abc  
+                            **Contact**: [9876543211](tel:9876543211)  
+                            **Status**: :green[Online]  
+                            """)
+                        with col2:
+                            st.image("manavatar.png", width=50)  # Adjust the width and image path
+                        
+                        st.markdown("---")  # Horizontal separator
+                        
+                        # Expert 2
+                        col1, col2 = st.columns([3, 1])  # 3:1 ratio for left and right columns
+                        with col1:
+                            st.markdown("""
+                            **Name**: Xyz  
+                            **Contact**: [1234567899](tel:1234567899)  
+                            **Status**: :red[Offline]  
+                            """)
+                        with col2:
+                            st.image("womanavatar.png", width=50)  # Adjust the width and image path
 
                     
                 else:
