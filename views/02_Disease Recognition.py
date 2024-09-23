@@ -116,7 +116,7 @@ Contact : *xxxxxxxxxx*
 Status : :green[Online]   
                                     
 Name : **Xyz**  
-Contact : f"[Call {phone_number}](tel:{phone_number})  
+Contact : f"[Call 9330931582](tel:9330931582)  
 Status : :red[Offline]  
 """)
                 else:
