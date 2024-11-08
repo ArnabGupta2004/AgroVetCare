@@ -57,4 +57,5 @@ with st.expander("Add Store"):
     st.write("Enter Store Details")
     st.text_input("Enter Store Name:")
     st.text_input("Enter Store Location:")
-    st.button("Submit")
+    if st.button("Submit"):
+            st.success("Wait for Verification.")
