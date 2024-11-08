@@ -35,7 +35,9 @@ st.logo("AgroVet Care_logo.png")
 
 
 # Feedback Section in Sidebar
-feedback = st.sidebar.text_area()
+st.sidebar.markdown("---")  # Separator
+st.sidebar.subheader("We Value Your Feedback")
+feedback = st.sidebar.text_area("Please provide your feedback below:")
 
 if st.sidebar.button("Submit Feedback"):
     if feedback:
