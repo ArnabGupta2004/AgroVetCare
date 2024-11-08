@@ -32,13 +32,9 @@ app_mode.run()
 
 # Display logo and sidebar information
 st.logo("AgroVet Care_logo.png")
-st.sidebar.text("Made by Team Code&Conquer")
 
-# Video in Sidebar - autoplay is usually dependent on browser settings
-st.sidebar.video("mute.mp4")
 
 # Feedback Section in Sidebar
-st.sidebar.markdown("---")  # Separator
 st.sidebar.subheader("We Value Your Feedback")
 feedback = st.sidebar.text_area("Please provide your feedback below:")
 
@@ -48,3 +44,5 @@ if st.sidebar.button("Submit Feedback"):
         # Here you can process the feedback, e.g., store it in a database or send via email
     else:
         st.sidebar.warning("Please enter your feedback before submitting.")
+
+st.sidebar.text("Made by Team Code&Conquer")
