@@ -35,7 +35,7 @@ st.logo("AgroVet Care_logo.png")
 st.sidebar.text("Made by Team Code&Conquer")
 
 # Video in Sidebar - autoplay is usually dependent on browser settings
-st.sidebar.video("855340-sd_640_360_25fps.mp4", start_time=0)
+st.sidebar.video("mute.mp4", start_time=0)
 
 # Feedback Section in Sidebar
 st.sidebar.markdown("---")  # Separator
