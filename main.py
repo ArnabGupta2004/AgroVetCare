@@ -3,7 +3,7 @@ import tensorflow as tf
 import numpy as np
 from streamlit_option_menu import option_menu
 
-# Define pages for navigation
+# Define your pages
 home = st.Page(
     page="views/01_Home.py",
     title="Home",
@@ -30,19 +30,18 @@ vet = st.Page(
 app_mode = st.navigation(pages=[home, dr, we, vet, about])
 app_mode.run()
 
-# Display logo and sidebar text
+# Display logo and sidebar information
 st.logo("AgroVet Care_logo.png")
 st.sidebar.text("Made by Team Code&Conquer")
 
-# Feedback section at the bottom
-st.markdown("---")  # Adds a horizontal line for separation
-st.header("Feedback")
-feedback = st.text_area("Please share your feedback or suggestions here:")
+# Feedback Section in Sidebar
+st.sidebar.markdown("---")  # Separator
+st.sidebar.subheader("We Value Your Feedback")
+feedback = st.sidebar.text_area("Please provide your feedback below:")
 
-# Feedback submit button
-if st.button("Submit Feedback"):
+if st.sidebar.button("Submit Feedback"):
     if feedback:
-        # Handle feedback submission (e.g., save it to a file, database, or show a thank-you message)
-        st.success("Thank you for your feedback!")
+        st.sidebar.success("Thank you for your feedback!")
+        # Here you can process the feedback, e.g., store it in a database or send via email
     else:
-        st.error("Please enter your feedback before submitting.")
+        st.sidebar.warning("Please enter your feedback before submitting.")
