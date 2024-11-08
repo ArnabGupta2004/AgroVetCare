@@ -36,24 +36,25 @@ for shop in shops:
 
 # Get the screen width to adjust the map size dynamically for mobile responsiveness
 if st.session_state.get("screen_width") is None:
-    st.session_state.screen_width = 300  # Default width if we can't detect
+    st.session_state.screen_width = 150  # Default width if we can't detect
 
 # Input to dynamically change map width, detecting mobile screen size
-map_width = st.session_state.screen_width if st.session_state.screen_width < 800 else 800
+map_width = 340
 map_height = 500  # Set a fixed height
 
 # Display the map with dynamic width for mobile responsiveness
 st.header("Map of Nearby Vets and Medicine Shops")
 folium_static(m, width=map_width, height=map_height)
 
-st.write("🔴➜ Vets 🟢➜ Medicines")
+st.markdown("""🔵➜ Your Location  
+🔴➜ Vets  
+🟢➜ Medicines  
+""")
 
 # Button to trigger the pop-up
-if st.button("Add Your Store"):
     # Simulated pop-up using an expander
-    with st.expander("", expanded=True):
-        st.write("Enter Store Details")
-        st.text_input("Enter Store Name:")
-        st.text_input("Enter Store Location:")
-        if st.button("Submit"):
-            st.success("Wait for Verification.")
+with st.expander("Add Store"):
+    st.write("Enter Store Details")
+    st.text_input("Enter Store Name:")
+    st.text_input("Enter Store Location:")
+    st.button("Submit")
