@@ -1,6 +1,6 @@
 import streamlit as st
 
-st.title("ABOUT")
+st.title("ABOUT US")
 st.markdown("""
             #### About Dataset
             This dataset is recreated using offline augmentation from the original dataset.
