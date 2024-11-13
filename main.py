@@ -19,7 +19,7 @@ we = st.Page(
 )
 about = st.Page(
     page="views/03_About Us.py",
-    title="About Us",
+    title="About Uss",
 )
 vet = st.Page(
     page="views/05_Vets.py",
