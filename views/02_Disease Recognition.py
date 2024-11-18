@@ -3,6 +3,13 @@ import tensorflow as tf
 import numpy as np
 from streamlit_option_menu import option_menu
 import urllib.parse
+import pickle
+from keras_preprocessing.image import load_img, img_to_array
+import io
+from PIL import Image
+import numpy as np
+from sklearn.svm import OneClassSVM
+import pickle
 
 # Define cure information with Google search links
 def google_search_link(disease_name):
@@ -62,12 +69,28 @@ livestock_cures = {
 }
 
 def plant_yes_no(test_image):
-    model = tf.keras.models.load_model("leaf_svm_model_ks.keras")
-    image = tf.keras.preprocessing.load_img(test_image, target_size=(128,128))
-    input_arr = tf.keras.preprocessing.img_to_array(image)
-    input_arr = np.array([input_arr])  # convert single image to batch
-    predictions = model.predict(input_arr)
-    return np.argmax(predictions)  # return index of max element
+    # Convert the uploaded image file to an in-memory file object
+    img_bytes = test_image.read()
+    img = Image.open(io.BytesIO(img_bytes))
+    
+    # Resize the image to (128, 128) to match the expected input size of the model
+    img = img.resize((128, 128))
+    
+    # Convert the image to a numpy array
+    img_array = np.array(img)
+    
+    # Flatten the image to 1D array (128 * 128 * 3 = 25088)
+    img_flattened = img_array.flatten().reshape(1, -1)
+    
+    # Load the OneClassSVM model
+    with open("leaf_svm_model_2.pkl", "rb") as f:
+        svm_model = pickle.load(f)
+    
+    # Predict whether the image is a plant or not
+    prediction = svm_model.predict(img_flattened)
+    
+    # Return 1 if it's a plant, else return 0
+    return 1 if prediction == 1 else 0
 
 def crop_model_prediction(test_image):
     model = tf.keras.models.load_model("trained_plant_disease_model.keras")
@@ -103,7 +126,6 @@ if dr_ch == "Crop":
         if st.button("Predict"):
             with st.spinner("Please Wait...."):
                 yn= plant_yes_no(test_image)
-                st.write(plant_yes_no(test_image))
                 if yn==1:
                     result_index = crop_model_prediction(test_image)
                     class_names = list(crop_cures.keys())
