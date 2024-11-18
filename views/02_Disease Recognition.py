@@ -3,13 +3,6 @@ import tensorflow as tf
 import numpy as np
 from streamlit_option_menu import option_menu
 import urllib.parse
-import pickle
-from keras_preprocessing.image import load_img, img_to_array
-import io
-from PIL import Image
-import numpy as np
-from sklearn.svm import OneClassSVM
-import pickle
 
 # Define cure information with Google search links
 def google_search_link(disease_name):
@@ -68,42 +61,18 @@ livestock_cures = {
     'lumpy skin': google_search_link('lumpy skin cure')
 }
 
-def plant_yes_no(test_image):
-    # Convert the uploaded image file to an in-memory file object
-    img_bytes = test_image.read()
-    img = Image.open(io.BytesIO(img_bytes))
-    
-    # Resize the image to (128, 128) to match the expected input size of the model
-    img = img.resize((128, 128))
-    
-    # Convert the image to a numpy array
-    img_array = np.array(img)
-    
-    # Flatten the image to 1D array (128 * 128 * 3 = 25088)
-    img_flattened = img_array.flatten().reshape(1, -1)
-    
-    # Load the OneClassSVM model
-    with open("leaf_svm_model_2.pkl", "rb") as f:
-        svm_model = pickle.load(f)
-    
-    # Predict whether the image is a plant or not
-    prediction = svm_model.predict(img_flattened)
-    
-    # Return 1 if it's a plant, else return 0
-    return 1 if prediction == 1 else 0
-
 def crop_model_prediction(test_image):
     model = tf.keras.models.load_model("trained_plant_disease_model.keras")
-    image = tf.keras.preprocessing.load_img(test_image, target_size=(128,128))
-    input_arr = tf.keras.preprocessing.img_to_array(image)
+    image = tf.keras.preprocessing.image.load_img(test_image, target_size=(128,128))
+    input_arr = tf.keras.preprocessing.image.img_to_array(image)
     input_arr = np.array([input_arr])  # convert single image to batch
     predictions = model.predict(input_arr)
     return np.argmax(predictions)  # return index of max element
 
 def livestock_model_prediction(test_image):
     model = tf.keras.models.load_model("trained_livestock_disease_model.keras")
-    image = tf.keras.preprocessing.load_img(test_image, target_size=(128,128))
-    input_arr = tf.keras.preprocessing.img_to_array(image)
+    image = tf.keras.preprocessing.image.load_img(test_image, target_size=(128,128))
+    input_arr = tf.keras.preprocessing.image.img_to_array(image)
     input_arr = np.array([input_arr])  # convert single image to batch
     predictions = model.predict(input_arr)
     return np.argmax(predictions)  # return index of max element
@@ -120,45 +89,54 @@ dr_ch = option_menu(
 
 if dr_ch == "Crop":
     st.header("Crop Disease Recognition")
-    test_image = st.file_uploader("Choose an Image:", type=["jpg", "jpeg", "png"])
-    if test_image is not None:
+    test_image = st.file_uploader("Choose an Image:")
+    if test_image:
         st.image(test_image, width=200)
         if st.button("Predict"):
             with st.spinner("Please Wait...."):
-                yn= plant_yes_no(test_image)
-                if yn==1:
-                    result_index = crop_model_prediction(test_image)
-                    class_names = list(crop_cures.keys())
-                    predicted_disease = class_names[result_index]
-                    st.write(f"Predicted Disease: {predicted_disease}")
-
+                result_index = crop_model_prediction(test_image)
+                class_names = list(crop_cures.keys())
+                predicted_disease = class_names[result_index]
+                st.write(f"Predicted Disease: {predicted_disease}")
                 
-                    # Check if predicted_disease is in crop_cures
-                    if predicted_disease in crop_cures:
-                        cure_link = crop_cures[predicted_disease]
-                        st.success(f"Model is predicting it's a **{predicted_disease}**")
-                        st.markdown(f"[Find Cure for {predicted_disease}]({cure_link})")
-                        
-                        # Additional buttons
-                        with st.expander("Visit Marketplace"):
-                            st.markdown("[Visit Amazon Marketplace](https://www.amazon.in)")
+                # Check if predicted_disease is in crop_cures
+                if predicted_disease in crop_cures:
+                    cure_link = crop_cures[predicted_disease]
+                    st.success(f"Model is predicting it's a **{predicted_disease}**")
+                    st.markdown(f"[Find Cure for {predicted_disease}]({cure_link})")
+                    
+                    # Additional buttons
+                    with st.expander("Visit Marketplace"):
+                        st.markdown("[Visit Amazon Marketplace](https://www.amazon.in)")
 
-                        with st.expander("Contact Experts"):
-                            st.markdown("""
-    Name : **Abc**  
-    Contact : *xxxxxxxxxx*  
-    Status : :green[Available]   
-                                        
-    Name : **Xyz**  
-    Contact : *xxxxxxxxxx*  
-    Status : :red[Unavailable]  
-    """)
-                    else:
-                        st.error(f"Prediction '{predicted_disease}' is not found in the cure dictionary.")
+                    with st.expander("Contact Experts"):
                         
+                        # Expert 1
+                        col1, col2 = st.columns([3, 1])  # 3:1 ratio for left and right columns
+                        with col1:
+                            st.markdown("""
+                            **Name**: Abc  
+                            **Contact**: [9876543211](tel:9876543211)  
+                            **Status**: :green[Online]  
+                            """)
+                        with col2:
+                            st.image("manavatar.png", width=50)  # Adjust the width and image path
+                        
+                        st.markdown("---")  # Horizontal separator
+                        
+                        # Expert 2
+                        col1, col2 = st.columns([3, 1])  # 3:1 ratio for left and right columns
+                        with col1:
+                            st.markdown("""
+                            **Name**: Xyz  
+                            **Contact**: [1234567899](tel:1234567899)  
+                            **Status**: :red[Offline]  
+                            """)
+                        with col2:
+                            st.image("womanavatar.png", width=50)  # Adjust the width and image path
                 else:
-                    st.error("Uploaded image isn't a plant / Upload better detailed image of diseased plant.")
-    
+                    st.error(f"Prediction '{predicted_disease}' is not found in the cure dictionary.")
+
 if dr_ch == "LiveStock":
     st.header("Livestock Disease Recognition")
     test_image = st.file_uploader("Choose an Image:")
@@ -182,15 +160,30 @@ if dr_ch == "LiveStock":
                         st.markdown("[Visit Amazon Marketplace](https://www.amazon.in)")
 
                     with st.expander("Contact Experts"):
-                        st.markdown("""
-Name : **Abc**  
-Contact : *xxxxxxxxxx*  
-Status : :green[Available]   
-                                    
-Name : **Xyz**  
-Contact : *xxxxxxxxxx*  
-Status : :red[Unavailable]  
-""")
+                        
+                        # Expert 1
+                        col1, col2 = st.columns([3, 1])  # 3:1 ratio for left and right columns
+                        with col1:
+                            st.markdown("""
+                            **Name**: Abc  
+                            **Contact**: [9876543211](tel:9876543211)  
+                            **Status**: :green[Online]  
+                            """)
+                        with col2:
+                            st.image("manavatar.png", width=50)  # Adjust the width and image path
+                        
+                        st.markdown("---")  # Horizontal separator
+                        
+                        # Expert 2
+                        col1, col2 = st.columns([3, 1])  # 3:1 ratio for left and right columns
+                        with col1:
+                            st.markdown("""
+                            **Name**: Xyz  
+                            **Contact**: [1234567899](tel:1234567899)  
+                            **Status**: :red[Offline]  
+                            """)
+                        with col2:
+                            st.image("womanavatar.png", width=50)  # Adjust the width and image path
 
                     
                 else:
