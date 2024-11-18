@@ -5,5 +5,4 @@ tensorflow
 numpy
 streamlit_option_menu
 streamlit_folium
-keras_preprocessing
-sklearn
+
