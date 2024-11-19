@@ -94,7 +94,9 @@ def crop_model_prediction(test_image):
     input_arr = tf.keras.preprocessing.image.img_to_array(image)
     input_arr = np.array([input_arr])  # convert single image to batch
     predictions = model.predict(input_arr)
-    return np.argmax(predictions)  # return index of max element
+    predicted_index = np.argmax(predictions)  # index of the predicted class
+    confidence = predictions[0][predicted_index] * 100  # confidence in percentage
+    return predicted_index, confidence
 
 def livestock_model_prediction(test_image):
     model = tf.keras.models.load_model("trained_livestock_disease_model.keras")
@@ -127,12 +129,12 @@ if dr_ch == "Crop":
                     result_index = crop_model_prediction(test_image)
                     class_names = list(crop_cures.keys())
                     predicted_disease = class_names[result_index]
-                    st.write(f"Predicted Disease: {predicted_disease}")
+                    #st.write(f"Predicted Disease: {predicted_disease}")
                     
                     # Check if predicted_disease is in crop_cures
                     if predicted_disease in crop_cures:
                         cure_link = crop_cures[predicted_disease]
-                        st.success(f"Model is predicting it's a **{predicted_disease}**")
+                        st.success(f"Model is predicting it's a **{predicted_disease}** with **{confidence:.2f}%** confidence.")
                         st.markdown(f"[Find Cure for {predicted_disease}]({cure_link})")
                         
                         # Additional buttons
