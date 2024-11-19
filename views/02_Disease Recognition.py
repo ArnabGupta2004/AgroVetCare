@@ -3,6 +3,11 @@ import tensorflow as tf
 import numpy as np
 from streamlit_option_menu import option_menu
 import urllib.parse
+import joblib
+from tensorflow.keras.applications import VGG16
+from tensorflow.keras.preprocessing import image
+
+
 
 # Define cure information with Google search links
 def google_search_link(disease_name):
@@ -61,6 +66,28 @@ livestock_cures = {
     'lumpy skin': google_search_link('lumpy skin cure')
 }
 
+def plant_yes_no(test_image):
+    vgg16 = VGG16(weights="imagenet", include_top=False, input_shape=(224, 224, 3))
+    feature_extractor = vgg16
+
+    svm = joblib.load("leaf_svm_model_jb.joblib")
+    
+    # Load the image and preprocess it
+    img = image.load_img(test_image, target_size=(224, 224))
+    img_array = image.img_to_array(img) / 255.0
+    img_array = np.expand_dims(img_array, axis=0)       
+    # Extract features using VGG16
+    features = feature_extractor.predict(img_array)
+    features = features.reshape(1, -1)
+        
+    # Predict with OneClassSVM
+    prediction = svm.predict(features)
+    if prediction[0] == 1:
+        return 1
+    else:
+        return 0
+        
+
 def crop_model_prediction(test_image):
     model = tf.keras.models.load_model("trained_plant_disease_model.keras")
     image = tf.keras.preprocessing.image.load_img(test_image, target_size=(128,128))
@@ -94,48 +121,52 @@ if dr_ch == "Crop":
         st.image(test_image, width=200)
         if st.button("Predict"):
             with st.spinner("Please Wait...."):
-                result_index = crop_model_prediction(test_image)
-                class_names = list(crop_cures.keys())
-                predicted_disease = class_names[result_index]
-                st.write(f"Predicted Disease: {predicted_disease}")
-                
-                # Check if predicted_disease is in crop_cures
-                if predicted_disease in crop_cures:
-                    cure_link = crop_cures[predicted_disease]
-                    st.success(f"Model is predicting it's a **{predicted_disease}**")
-                    st.markdown(f"[Find Cure for {predicted_disease}]({cure_link})")
+                yn=plant_yes_no(test_image)
+                if yn==1:
+                    result_index = crop_model_prediction(test_image)
+                    class_names = list(crop_cures.keys())
+                    predicted_disease = class_names[result_index]
+                    st.write(f"Predicted Disease: {predicted_disease}")
                     
-                    # Additional buttons
-                    with st.expander("Visit Marketplace"):
-                        st.markdown("[Visit Amazon Marketplace](https://www.amazon.in)")
+                    # Check if predicted_disease is in crop_cures
+                    if predicted_disease in crop_cures:
+                        cure_link = crop_cures[predicted_disease]
+                        st.success(f"Model is predicting it's a **{predicted_disease}**")
+                        st.markdown(f"[Find Cure for {predicted_disease}]({cure_link})")
+                        
+                        # Additional buttons
+                        with st.expander("Visit Marketplace"):
+                            st.markdown("[Visit Amazon Marketplace](https://www.amazon.in)")
 
-                    with st.expander("Contact Experts"):
-                        
-                        # Expert 1
-                        col1, col2 = st.columns([3, 1])  # 3:1 ratio for left and right columns
-                        with col1:
-                            st.markdown("""
-                            **Name**: Abc  
-                            **Contact**: [9876543211](tel:9876543211)  
-                            **Status**: :green[Online]  
-                            """)
-                        with col2:
-                            st.image("manavatar.png", width=50)  # Adjust the width and image path
-                        
-                        st.markdown("---")  # Horizontal separator
-                        
-                        # Expert 2
-                        col1, col2 = st.columns([3, 1])  # 3:1 ratio for left and right columns
-                        with col1:
-                            st.markdown("""
-                            **Name**: Xyz  
-                            **Contact**: [1234567899](tel:1234567899)  
-                            **Status**: :red[Offline]  
-                            """)
-                        with col2:
-                            st.image("womanavatar.png", width=50)  # Adjust the width and image path
+                        with st.expander("Contact Experts"):
+                            
+                            # Expert 1
+                            col1, col2 = st.columns([3, 1])  # 3:1 ratio for left and right columns
+                            with col1:
+                                st.markdown("""
+                                **Name**: Abc  
+                                **Contact**: [9876543211](tel:9876543211)  
+                                **Status**: :green[Online]  
+                                """)
+                            with col2:
+                                st.image("manavatar.png", width=50)  # Adjust the width and image path
+                            
+                            st.markdown("---")  # Horizontal separator
+                            
+                            # Expert 2
+                            col1, col2 = st.columns([3, 1])  # 3:1 ratio for left and right columns
+                            with col1:
+                                st.markdown("""
+                                **Name**: Xyz  
+                                **Contact**: [1234567899](tel:1234567899)  
+                                **Status**: :red[Offline]  
+                                """)
+                            with col2:
+                                st.image("womanavatar.png", width=50)  # Adjust the width and image path
+                    else:
+                        st.error(f"Prediction '{predicted_disease}' is not found in the cure dictionary.")
                 else:
-                    st.error(f"Prediction '{predicted_disease}' is not found in the cure dictionary.")
+                    st.warning("Upload a plant image.")        
 
 if dr_ch == "LiveStock":
     st.header("Livestock Disease Recognition")
