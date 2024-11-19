@@ -91,7 +91,7 @@ if dr_ch == "Crop":
     st.header("Crop Disease Recognition")
     test_image = st.file_uploader("Choose an Image:")
     if test_image:
-        st.image(test_image, width=400, use_column_width=True)
+        st.image(test_image, width=200)
         if st.button("Predict"):
             with st.spinner("Please Wait...."):
                 result_index = crop_model_prediction(test_image)
@@ -106,8 +106,34 @@ if dr_ch == "Crop":
                     st.markdown(f"[Find Cure for {predicted_disease}]({cure_link})")
                     
                     # Additional buttons
-                    st.button("Visit Marketplace", on_click=lambda: st.write("[Visit Amazon Marketplace](https://www.amazon.com)"))
-                    st.button("Contact Experts", on_click=lambda: st.write("To be introduced"))
+                    with st.expander("Visit Marketplace"):
+                        st.markdown("[Visit Amazon Marketplace](https://www.amazon.in)")
+
+                    with st.expander("Contact Experts"):
+                        
+                        # Expert 1
+                        col1, col2 = st.columns([3, 1])  # 3:1 ratio for left and right columns
+                        with col1:
+                            st.markdown("""
+                            **Name**: Abc  
+                            **Contact**: [9876543211](tel:9876543211)  
+                            **Status**: :green[Online]  
+                            """)
+                        with col2:
+                            st.image("manavatar.png", width=50)  # Adjust the width and image path
+                        
+                        st.markdown("---")  # Horizontal separator
+                        
+                        # Expert 2
+                        col1, col2 = st.columns([3, 1])  # 3:1 ratio for left and right columns
+                        with col1:
+                            st.markdown("""
+                            **Name**: Xyz  
+                            **Contact**: [1234567899](tel:1234567899)  
+                            **Status**: :red[Offline]  
+                            """)
+                        with col2:
+                            st.image("womanavatar.png", width=50)  # Adjust the width and image path
                 else:
                     st.error(f"Prediction '{predicted_disease}' is not found in the cure dictionary.")
 
@@ -115,7 +141,7 @@ if dr_ch == "LiveStock":
     st.header("Livestock Disease Recognition")
     test_image = st.file_uploader("Choose an Image:")
     if test_image:
-        st.image(test_image, width=400, use_column_width=True)
+        st.image(test_image, width=200)
         if st.button("Predict"):
             with st.spinner("Please Wait...."):
                 result_index = livestock_model_prediction(test_image)
@@ -130,7 +156,35 @@ if dr_ch == "LiveStock":
                     st.markdown(f"[Find Cure for {predicted_disease}]({cure_link})")
                     
                     # Additional buttons
-                    st.button("Visit Marketplace", on_click=lambda: st.write("[Visit Amazon Marketplace](https://www.amazon.com)"))
-                    st.button("Contact Experts", on_click=lambda: st.write("To be introduced"))
+                    with st.expander("Visit Marketplace"):
+                        st.markdown("[Visit Amazon Marketplace](https://www.amazon.in)")
+
+                    with st.expander("Contact Experts"):
+                        
+                        # Expert 1
+                        col1, col2 = st.columns([3, 1])  # 3:1 ratio for left and right columns
+                        with col1:
+                            st.markdown("""
+                            **Name**: Abc  
+                            **Contact**: [9876543211](tel:9876543211)  
+                            **Status**: :green[Online]  
+                            """)
+                        with col2:
+                            st.image("manavatar.png", width=50)  # Adjust the width and image path
+                        
+                        st.markdown("---")  # Horizontal separator
+                        
+                        # Expert 2
+                        col1, col2 = st.columns([3, 1])  # 3:1 ratio for left and right columns
+                        with col1:
+                            st.markdown("""
+                            **Name**: Xyz  
+                            **Contact**: [1234567899](tel:1234567899)  
+                            **Status**: :red[Offline]  
+                            """)
+                        with col2:
+                            st.image("womanavatar.png", width=50)  # Adjust the width and image path
+
+                    
                 else:
                     st.error(f"Prediction '{predicted_disease}' is not found in the cure dictionary.")
