@@ -6,4 +6,4 @@ numpy
 streamlit_option_menu
 streamlit_folium
 joblib
-sklearn
+scikit-learn
