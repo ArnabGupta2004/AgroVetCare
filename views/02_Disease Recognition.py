@@ -170,7 +170,7 @@ if dr_ch == "Crop":
 
 if dr_ch == "LiveStock":
     st.header("Livestock Disease Recognition")
-    test_image = st.file_uploader("Choose an Image:")
+    test_image = st.file_uploader("Choose an Image:", type=["png", "jpg", "jpeg"])
     if test_image:
         st.image(test_image, width=200)
         if st.button("Predict"):
