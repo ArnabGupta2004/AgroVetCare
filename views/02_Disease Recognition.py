@@ -116,7 +116,7 @@ dr_ch = option_menu(
 
 if dr_ch == "Crop":
     st.header("Crop Disease Recognition")
-    test_image = st.file_uploader("Choose an Image:")
+    test_image = st.file_uploader("Choose an Image:", type=["png", "jpg", "jpeg"])
     if test_image:
         st.image(test_image, width=200)
         if st.button("Predict"):
@@ -166,7 +166,9 @@ if dr_ch == "Crop":
                     else:
                         st.error(f"Prediction '{predicted_disease}' is not found in the cure dictionary.")
                 else:
-                    st.warning("Uploaded image isn't a plant/ Upload better detailed image of diseased plant.")        
+                    st.warning("Uploaded image isn't a plant/ Upload better detailed image of diseased plant.")
+      else:
+        st.info("Please upload a valid image file.")
 
 if dr_ch == "LiveStock":
     st.header("Livestock Disease Recognition")
