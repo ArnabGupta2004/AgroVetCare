@@ -121,7 +121,8 @@ if dr_ch == "Crop":
         st.image(test_image, width=200)
         if st.button("Predict"):
             with st.spinner("Please Wait...."):
-                yn=plant_yes_no(test_image)
+                yn=1
+                #yn=plant_yes_no(test_image)
                 if yn==1:
                     result_index = crop_model_prediction(test_image)
                     class_names = list(crop_cures.keys())
