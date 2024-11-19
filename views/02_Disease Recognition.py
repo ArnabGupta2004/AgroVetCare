@@ -126,7 +126,7 @@ if dr_ch == "Crop":
                 yn=1
                 #yn=plant_yes_no(test_image)
                 if yn==1:
-                    result_index = crop_model_prediction(test_image)
+                    result_index, confidence = crop_model_prediction(test_image)
                     class_names = list(crop_cures.keys())
                     predicted_disease = class_names[result_index]
                     #st.write(f"Predicted Disease: {predicted_disease}")
