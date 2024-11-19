@@ -3,14 +3,6 @@ import tensorflow as tf
 import numpy as np
 from streamlit_option_menu import option_menu
 
-# Load Custom CSS
-def load_css(file_name):
-    with open(file_name, "r") as f:
-        st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
-
-# Apply the CSS
-load_css("style.css")
-
 
 # Define your pages
 home = st.Page(
