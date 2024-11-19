@@ -3,6 +3,15 @@ import tensorflow as tf
 import numpy as np
 from streamlit_option_menu import option_menu
 
+# Load Custom CSS
+def load_css(file_name):
+    with open(file_name, "r") as f:
+        st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
+
+# Apply the CSS
+load_css("style.css")
+
+
 # Define your pages
 home = st.Page(
     page="views/01_Home.py",
@@ -34,15 +43,14 @@ app_mode.run()
 st.logo("AgroVet Care_logo.png")
 
 
-# Feedback Section in Sidebar
+# Feedback Section in Sidebar with Animation
 st.sidebar.subheader("We Value Your Feedback")
+st.markdown('<div class="fade-in">', unsafe_allow_html=True)
 feedback = st.sidebar.text_area("Please provide your feedback below:")
-
 if st.sidebar.button("Submit Feedback"):
     if feedback:
         st.sidebar.success("Thank you for your feedback!")
         # Here you can process the feedback, e.g., store it in a database or send via email
     else:
         st.sidebar.warning("Please enter your feedback before submitting.")
-
-st.sidebar.text("Made by Team Code&Conquer")
+st.markdown('</div>', unsafe_allow_html=True)
