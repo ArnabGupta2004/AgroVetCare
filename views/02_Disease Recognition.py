@@ -167,8 +167,6 @@ if dr_ch == "Crop":
                         st.error(f"Prediction '{predicted_disease}' is not found in the cure dictionary.")
                 else:
                     st.warning("Uploaded image isn't a plant/ Upload better detailed image of diseased plant.")
-        else:
-            st.info("Please upload a valid image file.")
 
 if dr_ch == "LiveStock":
     st.header("Livestock Disease Recognition")
