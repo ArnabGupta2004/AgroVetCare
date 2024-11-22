@@ -154,7 +154,7 @@ if dr_ch == "Crop":
                     # Check if predicted_disease is in crop_cures
                     if predicted_disease in crop_cures:
                         cure_link = crop_cures[predicted_disease]
-                        st.success(f"Model is predicting it's a **{predicted_disease}** with **{confidence:.2f}%** confidence.")
+                        st.success(f"Model is predicting it's a **{predicted_disease}**.")
                         st.markdown(f"[Find Cure for {predicted_disease}]({cure_link})")
                         
                         # Additional buttons
