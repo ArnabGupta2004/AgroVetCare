@@ -6,7 +6,7 @@ import urllib.parse
 import joblib
 from tensorflow.keras.applications import VGG16
 from tensorflow.keras.preprocessing import image
-
+import tempfile
 
 
 # Define cure information with Google search links
@@ -66,6 +66,50 @@ livestock_cures = {
     'lumpy skin': google_search_link('lumpy skin cure')
 }
 
+def classify_image(uploaded_file, green_threshold=15):
+    import cv2
+    import numpy as np
+    from skimage.feature import local_binary_pattern
+
+    # Save uploaded file to a temporary directory
+    with tempfile.NamedTemporaryFile(delete=False, suffix=".jpg") as temp_file:
+        temp_file.write(uploaded_file.read())
+        temp_file_path = temp_file.name
+
+    # Load and process the image
+    image = cv2.imread(temp_file_path)
+    if image is None:
+        raise ValueError("Could not read the image. Ensure the uploaded file is an image.")
+
+    image_hsv = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
+
+    # Green mapping
+    lower_green = np.array([35, 40, 40])
+    upper_green = np.array([85, 255, 255])
+    green_mask = cv2.inRange(image_hsv, lower_green, upper_green)
+
+    # Calculate green pixel percentage
+    green_pixels = cv2.countNonZero(green_mask)
+    total_pixels = image.shape[0] * image.shape[1]
+    green_percentage = (green_pixels / total_pixels) * 100
+
+    # If green percentage is below threshold, classify as "Not Plant"
+    if green_percentage < green_threshold:
+        return "Not Plant"
+
+    # Texture analysis on green regions
+    green_regions = cv2.bitwise_and(image, image, mask=green_mask)
+    gray_green = cv2.cvtColor(green_regions, cv2.COLOR_BGR2GRAY)
+    lbp = local_binary_pattern(gray_green, P=8, R=1, method="uniform")
+
+    # Use texture features for classification (dummy logic here)
+    texture_score = np.mean(lbp)
+    classification = 1 if texture_score > 5 else 0
+
+    return classification
+
+
+'''
 def plant_yes_no(test_image):
     vgg16 = VGG16(weights="imagenet", include_top=False, input_shape=(224, 224, 3))
     feature_extractor = vgg16
@@ -86,7 +130,7 @@ def plant_yes_no(test_image):
         return 1
     else:
         return 0
-        
+'''       
 
 def crop_model_prediction(test_image):
     model = tf.keras.models.load_model("trained_plant_disease_model.keras")
@@ -123,13 +167,14 @@ if dr_ch == "Crop":
         st.image(test_image, width=200)
         if st.button("Predict"):
             with st.spinner("Please Wait...."):
-                yn=1
+                yn=classify_image(test_image)
                 #yn=plant_yes_no(test_image)
                 if yn==1:
                     result_index, confidence = crop_model_prediction(test_image)
                     class_names = list(crop_cures.keys())
                     predicted_disease = class_names[result_index]
                     #st.write(f"Predicted Disease: {predicted_disease}")
+                    #st.write(f"Prediction Confidence: **{confidence:.2f}%**")
                     
                     # Check if predicted_disease is in crop_cures
                     if predicted_disease in crop_cures:
@@ -171,9 +216,10 @@ if dr_ch == "Crop":
                 else:
                     st.warning("Uploaded image isn't a plant/ Upload better detailed image of diseased plant.")
 
+
 if dr_ch == "LiveStock":
     st.header("Livestock Disease Recognition")
-    test_image = st.file_uploader("Choose an Image:", type=["png", "jpg", "jpeg"])
+    test_image = st.file_uploader("Choose an Image:")
     if test_image:
         st.image(test_image, width=200)
         if st.button("Predict"):
