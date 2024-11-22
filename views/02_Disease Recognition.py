@@ -106,31 +106,7 @@ def classify_image(uploaded_file, green_threshold=15):
     texture_score = np.mean(lbp)
     classification = 1 if texture_score > 5 else 0
 
-    return classification
-
-
-'''
-def plant_yes_no(test_image):
-    vgg16 = VGG16(weights="imagenet", include_top=False, input_shape=(224, 224, 3))
-    feature_extractor = vgg16
-
-    svm = joblib.load("leaf_svm_model_jb.joblib")
-    
-    # Load the image and preprocess it
-    img = image.load_img(test_image, target_size=(224, 224))
-    img_array = image.img_to_array(img) / 255.0
-    img_array = np.expand_dims(img_array, axis=0)       
-    # Extract features using VGG16
-    features = feature_extractor.predict(img_array)
-    features = features.reshape(1, -1)
-        
-    # Predict with OneClassSVM
-    prediction = svm.predict(features)
-    if prediction[0] == 1:
-        return 1
-    else:
-        return 0
-'''       
+    return classification  
 
 def crop_model_prediction(test_image):
     model = tf.keras.models.load_model("trained_plant_disease_model.keras")
@@ -168,7 +144,6 @@ if dr_ch == "Crop":
         if st.button("Predict"):
             with st.spinner("Please Wait...."):
                 yn=classify_image(test_image)
-                #yn=plant_yes_no(test_image)
                 if yn==1:
                     result_index, confidence = crop_model_prediction(test_image)
                     class_names = list(crop_cures.keys())
