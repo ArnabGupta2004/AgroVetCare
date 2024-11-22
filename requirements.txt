@@ -8,3 +8,4 @@ streamlit_folium
 joblib
 scikit-learn
 opencv-python
+scikit-image
