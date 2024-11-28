@@ -316,7 +316,7 @@ with col2:
         key=None,
     )
 
-col3,col4=st.columns([1,2],gap="large")
+col3,col4=st.columns([1,2],gap="small")
 with col3:
     st_lottie(
         lottie_crop,
