@@ -4,9 +4,11 @@ import numpy as np
 from streamlit_option_menu import option_menu
 import urllib.parse
 import joblib
+import json
 from tensorflow.keras.applications import VGG16
 from tensorflow.keras.preprocessing import image
 import tempfile
+from streamlit_lottie import st_lottie
 
 st.set_page_config(
     page_title="AgroVet Care",       # Set the page title
