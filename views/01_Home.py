@@ -325,24 +325,34 @@ if dr_ch == translate_text("LiveStock", selected_language):
                 else:
                     st.warning(translate_text("Uploaded image isn't a livestock disease or is unclear. Upload a better detailed image of the livestock disease.", selected_language))
 
-# Adding custom CSS to control layout on different devices
-st.markdown("""
-    <style>
-    /* For screens larger than 600px (tablet/desktop view) */
-    @media (min-width: 600px) {
-        .css-1d391kg { display: flex; }
-    }
 
-    /* For smaller screens (mobile view) */
-    @media (max-width: 600px) {
-        .css-1d391kg { display: block; }
-    }
-    </style>
-""", unsafe_allow_html=True)
+# Add a selectbox to let the user choose layout for mobile or desktop view
+layout_option = st.selectbox("Choose Layout", ["Desktop", "Mobile"], key="layout_selectbox")
 
-# Create first row with two columns
-col1, col2 = st.columns([2, 1], gap="small")
-with col1:
+# Create first row with two columns if "Desktop" is selected, otherwise one column for "Mobile"
+if layout_option == "Desktop":
+    col1, col2 = st.columns([2, 1], gap="small")
+    with col1:
+        st.markdown(f"""
+        ### {translate_text('How It Works', selected_language)}
+        1. **{translate_text('Upload Image', selected_language)}:** {translate_text('Go to the Disease Prediction page and upload an image of a plant or animal with suspected diseases.', selected_language)}
+        2. **{translate_text('Analysis', selected_language)}:** {translate_text('Our system will process the image using advanced AI algorithms to identify potential diseases.', selected_language)}
+        3. **{translate_text('Results', selected_language)}:** {translate_text('View the analysis results and receive recommendations for treatment and further action.', selected_language)}
+        """)
+
+    with col2:
+        st_lottie(
+            lottie_working,
+            speed=1,
+            reverse=False,
+            loop=True,
+            quality="low",
+            height=250,
+            width=250,
+            key=None,
+        )
+
+elif layout_option == "Mobile":
     st.markdown(f"""
     ### {translate_text('How It Works', selected_language)}
     1. **{translate_text('Upload Image', selected_language)}:** {translate_text('Go to the Disease Prediction page and upload an image of a plant or animal with suspected diseases.', selected_language)}
@@ -350,7 +360,6 @@ with col1:
     3. **{translate_text('Results', selected_language)}:** {translate_text('View the analysis results and receive recommendations for treatment and further action.', selected_language)}
     """)
 
-with col2:
     st_lottie(
         lottie_working,
         speed=1,
@@ -362,9 +371,32 @@ with col2:
         key=None,
     )
 
-# Create second row with two columns
-col3, col4 = st.columns([1, 2], gap="small")
-with col3:
+# For Crop Disease Prediction section, create separate column layout based on screen size
+if layout_option == "Desktop":
+    col3, col4 = st.columns([1, 2], gap="small")
+    with col3:
+        st_lottie(
+            lottie_crop,
+            speed=1,
+            reverse=False,
+            loop=True,
+            quality="low",
+            height=250,
+            width=250,
+            key=None,
+        )
+
+    with col4:
+        st.markdown(f"""
+        ### {translate_text('Crop Disease Prediction 🌿', selected_language)}  
+        {translate_text('Our system leverages advanced AI models to detect diseases in a wide range of crops, including fruits, vegetables, and grains. Simply upload an image of the affected plant, and our system will analyze it to identify potential issues like fungal infections, bacterial diseases, or nutrient deficiencies. With accurate and fast predictions, you can take timely action to protect your crops and maximize your yield.', selected_language)}
+        """)
+elif layout_option == "Mobile":
+    st.markdown(f"""
+    ### {translate_text('Crop Disease Prediction 🌿', selected_language)}  
+    {translate_text('Our system leverages advanced AI models to detect diseases in a wide range of crops, including fruits, vegetables, and grains. Simply upload an image of the affected plant, and our system will analyze it to identify potential issues like fungal infections, bacterial diseases, or nutrient deficiencies. With accurate and fast predictions, you can take timely action to protect your crops and maximize your yield.', selected_language)}
+    """)
+
     st_lottie(
         lottie_crop,
         speed=1,
@@ -376,21 +408,32 @@ with col3:
         key=None,
     )
 
-with col4:
-    st.markdown(f"""
-    ### {translate_text('Crop Disease Prediction 🌿', selected_language)}  
-    {translate_text('Our system leverages advanced AI models to detect diseases in a wide range of crops, including fruits, vegetables, and grains. Simply upload an image of the affected plant, and our system will analyze it to identify potential issues like fungal infections, bacterial diseases, or nutrient deficiencies. With accurate and fast predictions, you can take timely action to protect your crops and maximize your yield.', selected_language)}
-    """)
+# For Livestock Disease Prediction section, create separate column layout based on screen size
+if layout_option == "Desktop":
+    col5, col6 = st.columns([2, 1], gap="small")
+    with col5:
+        st.markdown(f"""
+        ### {translate_text('Livestock Disease Prediction 🐄', selected_language)}  
+        {translate_text('Keeping your livestock healthy is crucial for a thriving farm. Our system can identify common diseases in cattle, sheep, and other animals by analyzing uploaded images. From skin infections to respiratory issues, we provide accurate insights and treatment recommendations, helping you ensure the well-being of your animals and maintain a productive herd.', selected_language)}
+        """)
 
-# Create third row with two columns
-col5, col6 = st.columns([2, 1], gap="small")
-with col5:
+    with col6:
+        st_lottie(
+            lottie_cow,
+            speed=1,
+            reverse=False,
+            loop=True,
+            quality="low",
+            height=250,
+            width=250,
+            key=None,
+        )
+elif layout_option == "Mobile":
     st.markdown(f"""
     ### {translate_text('Livestock Disease Prediction 🐄', selected_language)}  
     {translate_text('Keeping your livestock healthy is crucial for a thriving farm. Our system can identify common diseases in cattle, sheep, and other animals by analyzing uploaded images. From skin infections to respiratory issues, we provide accurate insights and treatment recommendations, helping you ensure the well-being of your animals and maintain a productive herd.', selected_language)}
     """)
 
-with col6:
     st_lottie(
         lottie_cow,
         speed=1,
@@ -401,5 +444,6 @@ with col6:
         width=250,
         key=None,
     )
+
 
 
