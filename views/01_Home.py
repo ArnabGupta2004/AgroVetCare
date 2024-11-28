@@ -10,7 +10,7 @@ import tempfile
 
 st.set_page_config(
     page_title="AgroVet Care",       # Set the page title
-    layout="wide",                   # Use wide layout
+    layout="centered",                   # Use wide layout
     initial_sidebar_state="collapsed"  # Sidebar starts collapsed (closed)
 )
 
