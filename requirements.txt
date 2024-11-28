@@ -13,4 +13,4 @@ streamlit-lottie
 json5
 urllib3
 pillow
-googletrans
+googletrans==4.0.0-rc1
