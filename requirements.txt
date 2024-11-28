@@ -9,3 +9,7 @@ joblib
 scikit-learn
 opencv-python
 scikit-image
+streamlit-lottie
+json5
+urllib3
+pillow
