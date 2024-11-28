@@ -159,15 +159,19 @@ dr_ch = option_menu(
 
 if dr_ch == "Crop":
     st.header("Crop Disease Recognition")
-    tab1, tab2 = st.tabs(["Upload Image", "Capture from Camera"])
+    uploaded_file = None  # Initialize the variable to store the uploaded or captured file
 
     # Tab 1: File Uploader
     with tab1:
         test_image = st.file_uploader("Choose an Image:", type=["png", "jpg", "jpeg"])
-
+    
     # Tab 2: Camera Input
     with tab2:
-        test_image = st.camera_input("Capture Image:")
+        captured_file = st.camera_input("Capture Image:")
+    
+    # Check if a file was uploaded from either tab
+    if captured_file:
+        test_image = captured_file 
 
     if test_image:
         st.image(test_image, width=200)
