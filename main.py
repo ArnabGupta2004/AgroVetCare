@@ -27,7 +27,7 @@ vet = st.Page(
 )
 
 # Navigation menu
-app_mode = st.navigation(pages=[home, dr, we, vet, about])
+app_mode = st.navigation(pages=[home, we, vet, about])
 app_mode.run()
 
 # Display logo and sidebar information
