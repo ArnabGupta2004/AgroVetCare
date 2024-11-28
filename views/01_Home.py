@@ -159,7 +159,7 @@ dr_ch = option_menu(
 
 if dr_ch == "Crop":
     st.header("Crop Disease Recognition")
-    uploaded_file = None  # Initialize the variable to store the uploaded or captured file
+    test_image = None  # Initialize the variable to store the uploaded or captured file
 
     # Tab 1: File Uploader
     with tab1:
