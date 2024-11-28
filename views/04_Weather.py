@@ -1,25 +1,13 @@
 import streamlit as st
 import requests
 import datetime
-from streamlit.components.v1 import html
 
-# Set your OpenWeather and OpenCage API keys
+# OpenWeather API key
 API_KEY = st.secrets["openweather"]["api_key"]
-OPENCAGE_API_KEY = st.secrets["opencage"]["api_key"]
-
-# Function to get current weather data for given coordinates
-def get_current_weather(lat, lon):
-    url = f"http://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&appid={API_KEY}&units=metric"
-    response = requests.get(url)
-    if response.status_code == 200:
-        return response.json()
-    else:
-        st.error("Error fetching data from OpenWeather API")
-        return None
 
 # Function to get latitude and longitude from city name
 def get_lat_lon_from_city(city):
-    geocode_url = f"https://api.opencagedata.com/geocode/v1/json?q={city}&key={OPENCAGE_API_KEY}"
+    geocode_url = f"https://api.opencagedata.com/geocode/v1/json?q={city}&key={st.secrets['opencage']['api_key']}"
     response = requests.get(geocode_url)
     data = response.json()
     if data['results']:
@@ -29,16 +17,31 @@ def get_lat_lon_from_city(city):
     else:
         return None, None
 
-# Function to get weather forecast for given coordinates
+# Function to get weather forecast
 def get_weather_forecast(lat, lon):
     url = f"http://api.openweathermap.org/data/2.5/forecast?lat={lat}&lon={lon}&appid={API_KEY}&units=metric"
     response = requests.get(url)
+    
     if response.status_code != 200:
         st.error(f"Error fetching weather data: {response.status_code}")
         return None
+    
     return response.json()
 
-# Function to aggregate 5-day 3-hour forecast data into daily summaries
+# Function to check for severe weather alerts
+def check_for_severe_weather(forecast_data):
+    severe_conditions = ['storm', 'rain', 'thunderstorm', 'hail', 'snow']
+    alerts = []
+
+    for entry in forecast_data['list']:
+        weather_desc = entry['weather'][0]['description'].lower()
+        if any(condition in weather_desc for condition in severe_conditions):
+            date = datetime.datetime.fromtimestamp(entry['dt']).strftime('%d-%m-%Y %H:%M:%S')
+            alerts.append(f"On {date}: {weather_desc.title()}")
+
+    return alerts
+
+# Function to aggregate the 5-day 3-hour forecast into daily summaries
 def aggregate_daily_forecast(forecast_data):
     daily_forecast = {}
     
@@ -63,47 +66,16 @@ def aggregate_daily_forecast(forecast_data):
     
     return daily_forecast
 
-# Function to check for severe weather alerts
-def check_for_severe_weather(forecast_data):
-    severe_conditions = ['storm', 'rain', 'thunderstorm', 'hail', 'snow']
-    alerts = []
-
-    for entry in forecast_data['list']:
-        weather_desc = entry['weather'][0]['description'].lower()
-        if any(condition in weather_desc for condition in severe_conditions):
-            date = datetime.datetime.fromtimestamp(entry['dt']).strftime('%d-%m-%Y %H:%M:%S')
-            alerts.append(f"On {date}: {weather_desc.title()}")
-
-    return alerts
-
-# Function to display current weather in metric columns
-def display_current_weather(lat, lon, city):
-    data = get_current_weather(lat, lon)
-    if data:
-        temperature = data['main']['temp']
-        humidity = data['main']['humidity']
-        wind_speed = data['wind']['speed']
-        
-        st.write(f"### Current Weather for {city}")
-        
-        # Display metrics in three columns
-        col1, col2, col3 = st.columns(3)
-        with col1:
-            st.metric("Temperature (°C)", f"{temperature}°C")
-        with col2:
-            st.metric("Humidity (%)", f"{humidity}%")
-        with col3:
-            st.metric("Wind Speed (m/s)", f"{wind_speed} m/s")
-
-# Function to display weather forecast and alerts
+# Display weather data
 def display_forecast(forecast_data, city):
     if forecast_data is None:
         st.error("No forecast data available to display.")
         return
 
-    # Display severe weather alerts
+    # Check for severe weather alerts
     with st.expander("Upcoming Alerts"):
         alerts = check_for_severe_weather(forecast_data)
+        
         if alerts:
             st.write("### Weather Alerts")
             for alert in alerts:
@@ -111,7 +83,7 @@ def display_forecast(forecast_data, city):
         else:
             st.write("### No severe weather alerts in the forecast.")
 
-    # Aggregate forecast data into daily summaries
+    # Display 5-day weather forecast
     daily_forecast = aggregate_daily_forecast(forecast_data)
     st.write(f"### 5-day Weather Forecast for {city}")
     
@@ -126,48 +98,13 @@ def display_forecast(forecast_data, city):
         st.write(f"Weather: {weather_desc}")
         st.image(icon_url)
 
-# Function to get user's latitude and longitude from browser geolocation
-def get_browser_location():
-    location = None
-    location_js = """
-        <script>
-        navigator.geolocation.getCurrentPosition(function(position) {
-            const lat = position.coords.latitude;
-            const lon = position.coords.longitude;
-            const city = "Unknown";
-            const data = { "lat": lat, "lon": lon, "city": city };
-            window.parent.postMessage(data, "*");
-        }, function() {
-            window.parent.postMessage({"error": "Location not found"}, "*");
-        });
-        </script>
-    """
-    html(location_js, height=0, width=0)
-    return location
-
-# Main Streamlit app UI
+# Streamlit app UI
 st.title("Weather Alerts")
 
-# Display a placeholder where we will receive location
-location = st.empty()
-location_info = get_browser_location()
-
-if location_info:
-    latitude = location_info.get("lat")
-    longitude = location_info.get("lon")
-    city = location_info.get("city")
-    if latitude and longitude:
-        display_current_weather(latitude, longitude, city)
-    else:
-        st.error("Could not get location from browser.")
-else:
-    st.warning("Geolocation not supported by your browser.")
-
-# User input for city to view forecast
-st.header("Alerts")
+# User input for city
 city = st.text_input("Enter your city:")
 
-if st.button("Get Weather Forecast"):
+if st.button("Get Weather"):
     if city:
         lat, lon = get_lat_lon_from_city(city)
         if lat and lon:
