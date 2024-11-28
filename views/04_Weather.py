@@ -1,24 +1,11 @@
-# Import necessary libraries
 import streamlit as st
 import requests
 import datetime
+from streamlit.components.v1 import html
 
 # Set your OpenWeather and OpenCage API keys
 API_KEY = st.secrets["openweather"]["api_key"]
 OPENCAGE_API_KEY = st.secrets["opencage"]["api_key"]
-
-# Function to get user's latitude, longitude, and city based on IP
-def get_location():
-    try:
-        res = requests.get('https://ipinfo.io')
-        data = res.json()
-        loc = data['loc'].split(',')
-        latitude, longitude = float(loc[0]), float(loc[1])
-        city = data.get('city', 'Unknown')
-        return latitude, longitude, city
-    except Exception as e:
-        st.error("Could not determine location.")
-        return None, None, None
 
 # Function to get current weather data for given coordinates
 def get_current_weather(lat, lon):
@@ -139,13 +126,42 @@ def display_forecast(forecast_data, city):
         st.write(f"Weather: {weather_desc}")
         st.image(icon_url)
 
+# Function to get user's latitude and longitude from browser geolocation
+def get_browser_location():
+    location = None
+    location_js = """
+        <script>
+        navigator.geolocation.getCurrentPosition(function(position) {
+            const lat = position.coords.latitude;
+            const lon = position.coords.longitude;
+            const city = "Unknown";
+            const data = { "lat": lat, "lon": lon, "city": city };
+            window.parent.postMessage(data, "*");
+        }, function() {
+            window.parent.postMessage({"error": "Location not found"}, "*");
+        });
+        </script>
+    """
+    html(location_js, height=0, width=0)
+    return location
+
 # Main Streamlit app UI
 st.title("Weather Alerts")
 
-# Automatic location-based current weather display
-latitude, longitude, city = get_location()
-if latitude and longitude:
-    display_current_weather(latitude, longitude, city)
+# Display a placeholder where we will receive location
+location = st.empty()
+location_info = get_browser_location()
+
+if location_info:
+    latitude = location_info.get("lat")
+    longitude = location_info.get("lon")
+    city = location_info.get("city")
+    if latitude and longitude:
+        display_current_weather(latitude, longitude, city)
+    else:
+        st.error("Could not get location from browser.")
+else:
+    st.warning("Geolocation not supported by your browser.")
 
 # User input for city to view forecast
 st.header("Alerts")
