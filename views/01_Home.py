@@ -20,7 +20,11 @@ st.image("AgroVet Care_logo.png", use_column_width=True)
 st.markdown("""
 #### Welcome to the Disease Prediction System! 🌿🐄🔍       
 """)
+def load_lottiefile(filepath: str):
+    with open(filepath,"r") as f:
+        return json.load(f)
 
+lottie_working=load_lottiefile("lottiefiles/working.json")
 
 # Define cure information with Google search links
 def google_search_link(disease_name):
@@ -151,7 +155,18 @@ dr_ch = option_menu(
 
 if dr_ch == "Crop":
     st.header("Crop Disease Recognition")
-    test_image = st.file_uploader("Choose an Image:", type=["png", "jpg", "jpeg"])
+        tab1, tab2 = st.tabs(["Upload Image", "Capture from Camera"])
+
+    test_image = None
+
+    # Tab 1: File Uploader
+    with tab1:
+        test_image = st.file_uploader("Choose an Image:", type=["png", "jpg", "jpeg"])
+
+    # Tab 2: Camera Input
+    with tab2:
+        test_image = st.camera_input("Capture Image:")
+
     if test_image:
         st.image(test_image, width=200)
         if st.button("Predict"):
@@ -257,10 +272,25 @@ if dr_ch == "LiveStock":
                 else:
                     st.error(f"Prediction '{predicted_disease}' is not found in the cure dictionary.")
 
-st.markdown("""
-### How It Works
-1. **Upload Image:** Go to the **Disease Prediction** page and upload an image of a plant or animal with suspected diseases.
-2. **Analysis:** Our system will process the image using advanced AI algorithms to identify potential diseases.
-3. **Results:** View the analysis results and receive recommendations for treatment and further action.
-        
-""")
+col1,col2=st.columns([2,1],gap="small")
+with col1:
+    st.markdown("""
+    ### How It Works
+    1. **Upload Image:** Go to the **Disease Prediction** page and upload an image of a plant or animal with suspected diseases.
+    2. **Analysis:** Our system will process the image using advanced AI algorithms to identify potential diseases.
+    3. **Results:** View the analysis results and receive recommendations for treatment and further action.
+            
+    """)
+
+with col2:
+    st_lottie(
+        lottie_working,
+        speed=1,
+        reverse=False,
+        loop=True,
+        quality="low",
+        height=250,
+        width=250,
+        key=None,
+    )
+
