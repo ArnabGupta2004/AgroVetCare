@@ -161,6 +161,7 @@ if dr_ch == "Crop":
     st.header("Crop Disease Recognition")
     test_image = None  # Initialize the variable to store the uploaded or captured file
 
+    tab1, tab2 = st.tabs(["Upload Image", "Capture from Camera"])
     # Tab 1: File Uploader
     with tab1:
         test_image = st.file_uploader("Choose an Image:", type=["png", "jpg", "jpeg"])
