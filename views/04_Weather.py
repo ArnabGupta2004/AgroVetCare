@@ -17,13 +17,24 @@ def get_lat_lon_from_city(city):
     else:
         return None, None
 
-# Function to get weather forecast
+# Function to get current weather data
+def get_current_weather(lat, lon):
+    url = f"http://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&appid={API_KEY}&units=metric"
+    response = requests.get(url)
+    
+    if response.status_code != 200:
+        st.error(f"Error fetching current weather data: {response.status_code}")
+        return None
+    
+    return response.json()
+
+# Function to get 5-day weather forecast data
 def get_weather_forecast(lat, lon):
     url = f"http://api.openweathermap.org/data/2.5/forecast?lat={lat}&lon={lon}&appid={API_KEY}&units=metric"
     response = requests.get(url)
     
     if response.status_code != 200:
-        st.error(f"Error fetching weather data: {response.status_code}")
+        st.error(f"Error fetching forecast data: {response.status_code}")
         return None
     
     return response.json()
@@ -98,6 +109,23 @@ def display_forecast(forecast_data, city):
         st.write(f"Weather: {weather_desc}")
         st.image(icon_url)
 
+# Display current weather metrics
+def display_current_weather_metrics(current_weather, city):
+    if current_weather:
+        temperature = current_weather['main']['temp']
+        humidity = current_weather['main']['humidity']
+        wind_speed = current_weather['wind']['speed']
+        
+        st.write(f"### Current Weather in {city}")
+        
+        col1, col2, col3 = st.columns(3)
+        with col1:
+            st.metric("Temperature (°C)", f"{temperature}°C")
+        with col2:
+            st.metric("Humidity (%)", f"{humidity}%")
+        with col3:
+            st.metric("Wind Speed (m/s)", f"{wind_speed} m/s")
+
 # Streamlit app UI
 st.title("Weather Alerts")
 
@@ -108,7 +136,11 @@ if st.button("Get Weather"):
     if city:
         lat, lon = get_lat_lon_from_city(city)
         if lat and lon:
+            current_weather = get_current_weather(lat, lon)
             forecast_data = get_weather_forecast(lat, lon)
+            
+            if current_weather:
+                display_current_weather_metrics(current_weather, city)
             display_forecast(forecast_data, city)
         else:
             st.error("Could not find location. Please enter a valid city.")
