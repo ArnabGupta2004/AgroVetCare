@@ -13,3 +13,4 @@ streamlit-lottie
 json5
 urllib3
 pillow
+googletrans
