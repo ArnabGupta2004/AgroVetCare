@@ -325,6 +325,22 @@ if dr_ch == translate_text("LiveStock", selected_language):
                 else:
                     st.warning(translate_text("Uploaded image isn't a livestock disease or is unclear. Upload a better detailed image of the livestock disease.", selected_language))
 
+# Adding custom CSS to control layout on different devices
+st.markdown("""
+    <style>
+    /* For screens larger than 600px (tablet/desktop view) */
+    @media (min-width: 600px) {
+        .css-1d391kg { display: flex; }
+    }
+
+    /* For smaller screens (mobile view) */
+    @media (max-width: 600px) {
+        .css-1d391kg { display: block; }
+    }
+    </style>
+""", unsafe_allow_html=True)
+
+# Create first row with two columns
 col1, col2 = st.columns([2, 1], gap="small")
 with col1:
     st.markdown(f"""
@@ -346,14 +362,9 @@ with col2:
         key=None,
     )
 
-col3, col4 = st.columns([2, 1], gap="small")
+# Create second row with two columns
+col3, col4 = st.columns([1, 2], gap="small")
 with col3:
-    st.markdown(f"""
-    ### {translate_text('Crop Disease Prediction 🌿', selected_language)}  
-    {translate_text('Our system leverages advanced AI models to detect diseases in a wide range of crops, including fruits, vegetables, and grains. Simply upload an image of the affected plant, and our system will analyze it to identify potential issues like fungal infections, bacterial diseases, or nutrient deficiencies. With accurate and fast predictions, you can take timely action to protect your crops and maximize your yield.', selected_language)}
-    """)
-
-with col4:
     st_lottie(
         lottie_crop,
         speed=1,
@@ -364,8 +375,14 @@ with col4:
         width=250,
         key=None,
     )
-    
 
+with col4:
+    st.markdown(f"""
+    ### {translate_text('Crop Disease Prediction 🌿', selected_language)}  
+    {translate_text('Our system leverages advanced AI models to detect diseases in a wide range of crops, including fruits, vegetables, and grains. Simply upload an image of the affected plant, and our system will analyze it to identify potential issues like fungal infections, bacterial diseases, or nutrient deficiencies. With accurate and fast predictions, you can take timely action to protect your crops and maximize your yield.', selected_language)}
+    """)
+
+# Create third row with two columns
 col5, col6 = st.columns([2, 1], gap="small")
 with col5:
     st.markdown(f"""
