@@ -229,7 +229,21 @@ if dr_ch == "Crop":
 
 if dr_ch == "LiveStock":
     st.header("Livestock Disease Recognition")
-    test_image = st.file_uploader("Choose an Image:")
+    test_image = None  # Initialize the variable to store the uploaded or captured file
+
+    tab1, tab2 = st.tabs(["Upload Image", "Capture from Camera"])
+    # Tab 1: File Uploader
+    with tab1:
+        test_image = st.file_uploader("Choose an Image:", type=["png", "jpg", "jpeg"])
+    
+    # Tab 2: Camera Input
+    with tab2:
+        captured_file = st.camera_input("Capture Image:")
+    
+    # Check if a file was uploaded from either tab
+    if captured_file:
+        test_image = captured_file
+    
     if test_image:
         st.image(test_image, width=200)
         if st.button("Predict"):
