@@ -326,10 +326,10 @@ if dr_ch == translate_text("LiveStock", selected_language):
                     st.warning(translate_text("Uploaded image isn't a livestock disease or is unclear. Upload a better detailed image of the livestock disease.", selected_language))
 
 
-import streamlit as st
 
 # Create a layout that adjusts based on the screen size
-if st.sidebar.radio("Select Layout", ["Desktop", "Mobile"]) == "Desktop":
+layout_choice = st.sidebar.radio("Select Layout", ["Desktop", "Mobile"], key="layout_choice")
+if layout_choice == "Desktop":
     # Desktop layout: columns side-by-side
     col1, col2 = st.columns([2, 1], gap="small")
     with col1:
@@ -339,7 +339,7 @@ if st.sidebar.radio("Select Layout", ["Desktop", "Mobile"]) == "Desktop":
         2. **{translate_text('Analysis', selected_language)}:** {translate_text('Our system will process the image using advanced AI algorithms to identify potential diseases.', selected_language)}
         3. **{translate_text('Results', selected_language)}:** {translate_text('View the analysis results and receive recommendations for treatment and further action.', selected_language)}
         """)
-        
+
     with col2:
         st_lottie(
             lottie_working,
@@ -349,7 +349,7 @@ if st.sidebar.radio("Select Layout", ["Desktop", "Mobile"]) == "Desktop":
             quality="low",
             height=250,
             width=250,
-            key=None,
+            key="working_animation",
         )
 
     # For crop disease prediction section
@@ -363,15 +363,15 @@ if st.sidebar.radio("Select Layout", ["Desktop", "Mobile"]) == "Desktop":
             quality="low",
             height=250,
             width=250,
-            key=None,
+            key="crop_animation",
         )
-        
+
     with col4:
         st.markdown(f"""
         ### {translate_text('Crop Disease Prediction 🌿', selected_language)}  
         {translate_text('Our system leverages advanced AI models to detect diseases in a wide range of crops, including fruits, vegetables, and grains. Simply upload an image of the affected plant, and our system will analyze it to identify potential issues like fungal infections, bacterial diseases, or nutrient deficiencies. With accurate and fast predictions, you can take timely action to protect your crops and maximize your yield.', selected_language)}
         """)
-    
+
     # Livestock disease prediction section
     col5, col6 = st.columns([2, 1], gap="small")
     with col5:
@@ -379,7 +379,7 @@ if st.sidebar.radio("Select Layout", ["Desktop", "Mobile"]) == "Desktop":
         ### {translate_text('Livestock Disease Prediction 🐄', selected_language)}  
         {translate_text('Keeping your livestock healthy is crucial for a thriving farm. Our system can identify common diseases in cattle, sheep, and other animals by analyzing uploaded images. From skin infections to respiratory issues, we provide accurate insights and treatment recommendations, helping you ensure the well-being of your animals and maintain a productive herd.', selected_language)}
         """)
-        
+
     with col6:
         st_lottie(
             lottie_cow,
@@ -389,10 +389,10 @@ if st.sidebar.radio("Select Layout", ["Desktop", "Mobile"]) == "Desktop":
             quality="low",
             height=250,
             width=250,
-            key=None,
+            key="cow_animation",
         )
 
-elif st.sidebar.radio("Select Layout", ["Desktop", "Mobile"]) == "Mobile":
+elif layout_choice == "Mobile":
     # Mobile layout: stack everything vertically
     st.markdown(f"""
     ### {translate_text('How It Works', selected_language)}
@@ -409,7 +409,7 @@ elif st.sidebar.radio("Select Layout", ["Desktop", "Mobile"]) == "Mobile":
         quality="low",
         height=250,
         width=250,
-        key=None,
+        key="working_animation_mobile",
     )
 
     # Crop Disease Prediction section
@@ -426,7 +426,7 @@ elif st.sidebar.radio("Select Layout", ["Desktop", "Mobile"]) == "Mobile":
         quality="low",
         height=250,
         width=250,
-        key=None,
+        key="crop_animation_mobile",
     )
 
     # Livestock Disease Prediction section
@@ -443,8 +443,9 @@ elif st.sidebar.radio("Select Layout", ["Desktop", "Mobile"]) == "Mobile":
         quality="low",
         height=250,
         width=250,
-        key=None,
+        key="cow_animation_mobile",
     )
+
 
 
 
