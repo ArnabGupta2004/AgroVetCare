@@ -22,11 +22,13 @@ st.image("AgroVet Care_logo.png", use_column_width=True)
 st.markdown("""
 #### Welcome to the Disease Prediction System! 🌿🐄🔍       
 """)
+
 def load_lottiefile(filepath: str):
     with open(filepath,"r") as f:
         return json.load(f)
 
 lottie_working=load_lottiefile("lottiefiles/working.json")
+
 
 # Define cure information with Google search links
 def google_search_link(disease_name):
@@ -157,7 +159,7 @@ dr_ch = option_menu(
 
 if dr_ch == "Crop":
     st.header("Crop Disease Recognition")
-        tab1, tab2 = st.tabs(["Upload Image", "Capture from Camera"])
+    tab1, tab2 = st.tabs(["Upload Image", "Capture from Camera"])
 
     test_image = None
 
@@ -295,4 +297,11 @@ with col2:
         width=250,
         key=None,
     )
+
+
+
+
+
+
+
 
