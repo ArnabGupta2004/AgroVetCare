@@ -220,7 +220,7 @@ if dr_ch == translate_text("Crop", selected_language):
                     # Check if predicted_disease is in crop_cures
                     if predicted_disease in crop_cures:
                         cure_link = crop_cures[predicted_disease]
-                        st.success(f"{translate_text('Model is predicting it\'s a', selected_language)} **{predicted_disease}**.")
+                        st.success(f"""{translate_text("Model is predicting it's a", selected_language)} **{predicted_disease}**.""")
                         st.markdown(f"[{translate_text('Find Cure for', selected_language)} {predicted_disease}]({cure_link})")
                         
                         # Additional buttons
@@ -290,7 +290,7 @@ if dr_ch == translate_text("LiveStock", selected_language):
                     # Check if predicted_disease is in livestock_cures
                     if predicted_disease in livestock_cures:
                         cure_link = livestock_cures[predicted_disease]
-                        st.success(f"{translate_text('Model is predicting it\'s a', selected_language)} **{predicted_disease}**.")
+                        st.success(f"""{translate_text("Model is predicting it's a", selected_language)} **{predicted_disease}**.""")
                         st.markdown(f"[{translate_text('Find Cure for', selected_language)} {predicted_disease}]({cure_link})")
                         
                         # Additional buttons
