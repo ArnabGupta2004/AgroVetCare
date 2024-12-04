@@ -158,7 +158,7 @@ st.markdown(
 
 dr_ch = option_menu(
     menu_title=None,
-    options=["Crop", "LiveStock"],
+    options=["LiveStock", "Crop"],
     icons=["square-fill", "square-fill"],
     default_index=0,
     orientation="horizontal"
