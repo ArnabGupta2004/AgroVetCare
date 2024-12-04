@@ -1,0 +1,28 @@
+/* Style inputs with type="text", select elements and textareas */
+input[type=text], input[type=email], textarea {
+    width: 100%; /* Full width */
+    padding: 5px; /* Some padding */
+    background-color: #273026; /* Changed background color */
+    color: white; /* Text color to ensure visibility */ 
+    border: 1px solid #273026; /* Gray border */
+    border-radius: 8px; /* Rounded borders */
+    box-sizing: border-box; /* Make sure that padding and width stays in place */
+    margin-top: 5px; /* Add a top margin */
+    margin-bottom: 5px; /* Bottom margin */
+    resize: vertical /* Allow the user to vertically resize the textarea (not horizontally) */
+  }
+  
+  /* Style the submit button with a specific background color etc */
+  button[type=submit] {
+    background-color: #566730;
+    color: white;
+    padding: 5px 15px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+  
+  /* When moving the mouse over the submit button, add a darker green color */
+  button[type=submit]:hover {
+    background-color: #182019;
+  }
