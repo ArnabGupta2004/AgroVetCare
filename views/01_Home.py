@@ -9,18 +9,40 @@ from tensorflow.keras.applications import VGG16
 from tensorflow.keras.preprocessing import image
 import tempfile
 from streamlit_lottie import st_lottie
+from googletrans import Translator
 
-# Inject the CSS with st.markdown
-st.image("AgroVet Care_logo.png", use_column_width=True)
 
-st.markdown(
-    """
-    <div style="text-align: center;">
-        <h7>Welcome to the Disease Prediction System! 🌿🐄🔍</h7>
-    </div>
-    """,
-    unsafe_allow_html=True
-)
+# Instantiate the translator object
+translator = Translator()
+
+col0,colt=st.columns([4,1],gap="large")
+with col0:
+    # Inject the CSS with st.markdown
+    st.image("AgroVet Care_logo.png", use_column_width=True)
+
+with colt:
+    # Display the language selection dropdown
+    languages = ['en', 'hi', 'mr', 'ta', 'te', 'bn', 'ur']
+    selected_language = st.selectbox("Select Language", languages)
+
+# Function to translate text
+def translate_text(text, lang='en'):
+    try:
+        translated = translator.translate(text, dest=lang)
+        return translated.text
+    except Exception as e:
+        return text  # Return the original text if translation fails
+
+# Translate content based on selected language
+#def translate_content():
+    #st.markdown(f"<h2 style='text-align: center;'>{translate_text('Change Language', selected_language)}</h2>", unsafe_allow_html=True)
+    #st.markdown(f"<h7 style='text-align: center;'>{translate_text('Welcome to the Disease Prediction System! 🌿🐄🔍', selected_language)}</h7>", unsafe_allow_html=True)
+
+
+
+#translate_content()
+
+st.markdown(f"<div style='text-align: center;'><h7>{translate_text('Welcome to the Disease Prediction System! 🌿🐄🔍', selected_language)}</h7></div>", unsafe_allow_html=True)
 
 def load_lottiefile(filepath: str):
     with open(filepath,"r") as f:
@@ -147,36 +169,32 @@ def livestock_model_prediction(test_image):
     predictions = model.predict(input_arr)
     return np.argmax(predictions)  # return index of max element
 
-st.markdown(
-    """
-    <div style="text-align: center;">
-        <h1>Disease Recognition</h1>
-    </div>
-    """,
-    unsafe_allow_html=True
-)
+# Disease recognition sections
+st.markdown(f"<div style='text-align: center;'><h1>{translate_text('Disease Recognition', selected_language)}</h1></div>", unsafe_allow_html=True)
+
 
 dr_ch = option_menu(
     menu_title=None,
-    options=["LiveStock", "Crop"],
+    options=[translate_text("LiveStock", selected_language), translate_text("Crop", selected_language)],
     icons=["square-fill", "square-fill"],
     default_index=0,
     orientation="horizontal"
 )
 
-if dr_ch == "Crop":
+# Crop Disease Recognition Tab
+if dr_ch == translate_text("Crop", selected_language):
     
-    st.header("Crop Disease Recognition")
+    st.header(translate_text("Crop Disease Recognition", selected_language))
     test_image = None  # Initialize the variable to store the uploaded or captured file
 
-    tab1, tab2 = st.tabs(["Upload Image", "Capture from Camera"])
+    tab1, tab2 = st.tabs([translate_text("Upload Image", selected_language), translate_text("Capture from Camera", selected_language)])
     # Tab 1: File Uploader
     with tab1:
-        test_image = st.file_uploader("Choose an Image:", type=["png", "jpg", "jpeg"])
+        test_image = st.file_uploader(translate_text("Choose an Image:", selected_language), type=["png", "jpg", "jpeg"])
     
     # Tab 2: Camera Input
     with tab2:
-        captured_file = st.camera_input("Capture Image:")
+        captured_file = st.camera_input(translate_text("Capture Image:", selected_language))
     
     # Check if a file was uploaded from either tab
     if captured_file:
@@ -184,32 +202,30 @@ if dr_ch == "Crop":
 
     if test_image:
         st.image(test_image, width=200)
-        if st.button("Predict"):
-            with st.spinner("Please Wait...."):
+        if st.button(translate_text("Predict", selected_language)):
+            with st.spinner(translate_text("Please Wait....", selected_language)):
                 yn=classify_image(test_image)
                 if yn==1:
                     result_index, confidence = crop_model_prediction(test_image)
                     class_names = list(crop_cures.keys())
                     predicted_disease = class_names[result_index]
-                    #st.write(f"Predicted Disease: {predicted_disease}")
-                    #st.write(f"Prediction Confidence: **{confidence:.2f}%**")
                     
                     # Check if predicted_disease is in crop_cures
                     if predicted_disease in crop_cures:
                         cure_link = crop_cures[predicted_disease]
-                        st.success(f"Model is predicting it's a **{predicted_disease}**.")
-                        st.markdown(f"[Find Cure for {predicted_disease}]({cure_link})")
+                        st.success(f"""{translate_text("Model is predicting it's a", selected_language)} **{predicted_disease}**.""")
+                        st.markdown(f"[{translate_text('Find Cure for', selected_language)} {predicted_disease}]({cure_link})")
                         
                         # Additional buttons
-                        with st.expander("Visit Marketplace"):
+                        with st.expander(translate_text("Visit Marketplace", selected_language)):
                             st.markdown("[Visit Amazon Marketplace](https://www.amazon.in)")
 
-                        with st.expander("Contact Experts"):
+                        with st.expander(translate_text("Contact Experts", selected_language)):
                             
                             # Expert 1
                             col1, col2 = st.columns([3, 1])  # 3:1 ratio for left and right columns
                             with col1:
-                                st.markdown("""
+                                st.markdown(f"""
                                 **Name**: Abc  
                                 **Contact**: [9876543211](tel:9876543211)  
                                 **Status**: :green[Online]  
@@ -222,7 +238,7 @@ if dr_ch == "Crop":
                             # Expert 2
                             col1, col2 = st.columns([3, 1])  # 3:1 ratio for left and right columns
                             with col1:
-                                st.markdown("""
+                                st.markdown(f"""
                                 **Name**: Xyz  
                                 **Contact**: [1234567899](tel:1234567899)  
                                 **Status**: :red[Offline]  
@@ -232,83 +248,87 @@ if dr_ch == "Crop":
                     else:
                         st.error(f"Prediction '{predicted_disease}' is not found in the cure dictionary.")
                 else:
-                    st.warning("Uploaded image isn't a plant/ Upload better detailed image of diseased plant.")
+                    st.warning(translate_text("Uploaded image isn't a plant/ Upload better detailed image of diseased plant.", selected_language))
 
 
-if dr_ch == "LiveStock":
-    st.header("Livestock Disease Recognition")
+
+if dr_ch == translate_text("LiveStock", selected_language):
+
+    st.header(translate_text("Livestock Disease Recognition", selected_language))
     test_image = None  # Initialize the variable to store the uploaded or captured file
 
-    tab1, tab2 = st.tabs(["Upload Image", "Capture from Camera"])
+    tab1, tab2 = st.tabs([translate_text("Upload Image", selected_language), translate_text("Capture from Camera", selected_language)])
     # Tab 1: File Uploader
     with tab1:
-        test_image = st.file_uploader("Choose an Image:", type=["png", "jpg", "jpeg"])
+        test_image = st.file_uploader(translate_text("Choose an Image:", selected_language), type=["png", "jpg", "jpeg"])
     
     # Tab 2: Camera Input
     with tab2:
-        captured_file = st.camera_input("Capture Image:")
+        captured_file = st.camera_input(translate_text("Capture Image:", selected_language))
     
     # Check if a file was uploaded from either tab
     if captured_file:
-        test_image = captured_file
-    
+        test_image = captured_file 
+
     if test_image:
         st.image(test_image, width=200)
-        if st.button("Predict"):
-            with st.spinner("Please Wait...."):
-                result_index = livestock_model_prediction(test_image)
-                class_names = list(livestock_cures.keys())
-                predicted_disease = class_names[result_index]
-                st.write(f"Predicted Disease: {predicted_disease}")
-                
-                # Check if predicted_disease is in livestock_cures
-                if predicted_disease in livestock_cures:
-                    cure_link = livestock_cures[predicted_disease]
-                    st.success(f"Model is predicting it's a **{predicted_disease}**")
-                    st.markdown(f"[Find Cure for {predicted_disease}]({cure_link})")
+        if st.button(translate_text("Predict", selected_language)):
+            with st.spinner(translate_text("Please Wait....", selected_language)):
+                yn = classify_image(test_image)
+                if yn == 1:
+                    result_index = livestock_model_prediction(test_image)
+                    class_names = list(livestock_cures.keys())
+                    predicted_disease = class_names[result_index]
                     
-                    # Additional buttons
-                    with st.expander("Visit Marketplace"):
-                        st.markdown("[Visit Amazon Marketplace](https://www.amazon.in)")
+                    # Check if predicted_disease is in livestock_cures
+                    if predicted_disease in livestock_cures:
+                        cure_link = livestock_cures[predicted_disease]
+                        st.success(f"""{translate_text("Model is predicting it's a", selected_language)} **{predicted_disease}**.""")
+                        st.markdown(f"[{translate_text('Find Cure for', selected_language)} {predicted_disease}]({cure_link})")
+                        
+                        # Additional buttons
+                        with st.expander(translate_text("Visit Marketplace", selected_language)):
+                            st.markdown("[Visit Amazon Marketplace](https://www.amazon.in)")
 
-                    with st.expander("Contact Experts"):
-                        
-                        # Expert 1
-                        col1, col2 = st.columns([3, 1])  # 3:1 ratio for left and right columns
-                        with col1:
-                            st.markdown("""
-                            **Name**: Abc  
-                            **Contact**: [9876543211](tel:9876543211)  
-                            **Status**: :green[Online]  
-                            """)
-                        with col2:
-                            st.image("manavatar.png", width=50)  # Adjust the width and image path
-                        
-                        st.markdown("---")  # Horizontal separator
-                        
-                        # Expert 2
-                        col1, col2 = st.columns([3, 1])  # 3:1 ratio for left and right columns
-                        with col1:
-                            st.markdown("""
-                            **Name**: Xyz  
-                            **Contact**: [1234567899](tel:1234567899)  
-                            **Status**: :red[Offline]  
-                            """)
-                        with col2:
-                            st.image("womanavatar.png", width=50)  # Adjust the width and image path
-
-                    
+                        with st.expander(translate_text("Contact Experts", selected_language)):
+                            
+                            # Expert 1
+                            col1, col2 = st.columns([3, 1])  # 3:1 ratio for left and right columns
+                            with col1:
+                                st.markdown(f"""
+                                **Name**: Dr. Singh  
+                                **Contact**: [9876543211](tel:9876543211)  
+                                **Status**: :green[Online]  
+                                """)
+                            with col2:
+                                st.image("manavatar.png", width=50)  # Adjust the width and image path
+                            
+                            st.markdown("---")  # Horizontal separator
+                            
+                            # Expert 2
+                            col1, col2 = st.columns([3, 1])  # 3:1 ratio for left and right columns
+                            with col1:
+                                st.markdown(f"""
+                                **Name**: Dr. Sharma  
+                                **Contact**: [1234567899](tel:1234567899)  
+                                **Status**: :red[Offline]  
+                                """)
+                            with col2:
+                                st.image("womanavatar.png", width=50)  # Adjust the width and image path
+                    else:
+                        st.error(f"{translate_text('Prediction', selected_language)} '{predicted_disease}' {translate_text('is not found in the cure dictionary.', selected_language)}")
                 else:
-                    st.error(f"Prediction '{predicted_disease}' is not found in the cure dictionary.")
+                    st.warning(translate_text("Uploaded image isn't a livestock disease or is unclear. Upload a better detailed image of the livestock disease.", selected_language))
 
-col1,col2=st.columns([2,1],gap="small")
+st.markdown("---")
+
+col1, col2 = st.columns([2, 1], gap="small")
 with col1:
-    st.markdown("""
-    ### How It Works
-    1. **Upload Image:** Go to the **Disease Prediction** page and upload an image of a plant or animal with suspected diseases.
-    2. **Analysis:** Our system will process the image using advanced AI algorithms to identify potential diseases.
-    3. **Results:** View the analysis results and receive recommendations for treatment and further action.
-            
+    st.markdown(f"""
+    ### {translate_text('How It Works', selected_language)}
+    1. **{translate_text('Upload Image', selected_language)}:** {translate_text('Go to the Disease Prediction page and upload an image of a plant or animal with suspected diseases.', selected_language)}
+    2. **{translate_text('Analysis', selected_language)}:** {translate_text('Our system will process the image using advanced AI algorithms to identify potential diseases.', selected_language)}
+    3. **{translate_text('Results', selected_language)}:** {translate_text('View the analysis results and receive recommendations for treatment and further action.', selected_language)}
     """)
 
 with col2:
@@ -323,8 +343,16 @@ with col2:
         key=None,
     )
 
-col3,col4=st.columns([1,2],gap="small")
+st.markdown("---")
+
+col3, col4 = st.columns([2, 1], gap="small")
 with col3:
+    st.markdown(f"""
+    ### {translate_text('Crop Disease Prediction 🌿', selected_language)}  
+    {translate_text('Our system leverages advanced AI models to detect diseases in a wide range of crops, including fruits, vegetables, and grains. Simply upload an image of the affected plant, and our system will analyze it to identify potential issues like fungal infections, bacterial diseases, or nutrient deficiencies. With accurate and fast predictions, you can take timely action to protect your crops and maximize your yield.', selected_language)}
+    """)
+
+with col4:
     st_lottie(
         lottie_crop,
         speed=1,
@@ -335,19 +363,16 @@ with col3:
         width=250,
         key=None,
     )
+    
+st.markdown("---")
 
-with col4:
-    st.markdown("""
-    ### Crop Disease Prediction 🌿  
-    Our system leverages advanced AI models to detect diseases in a wide range of crops, including fruits, vegetables, and grains. Simply upload an image of the affected plant, and our system will analyze it to identify potential issues like fungal infections, bacterial diseases, or nutrient deficiencies. With accurate and fast predictions, you can take timely action to protect your crops and maximize your yield.       
+col5, col6 = st.columns([2, 1], gap="small")
+with col5:
+    st.markdown(f"""
+    ### {translate_text('Livestock Disease Prediction 🐄', selected_language)}  
+    {translate_text('Keeping your livestock healthy is crucial for a thriving farm. Our system can identify common diseases in cattle, sheep, and other animals by analyzing uploaded images. From skin infections to respiratory issues, we provide accurate insights and treatment recommendations, helping you ensure the well-being of your animals and maintain a productive herd.', selected_language)}
     """)
 
-col5,col6=st.columns([2,1],gap="small")
-with col5:
-    st.markdown("""
-        ### Livestock Disease Prediction 🐄  
-        Keeping your livestock healthy is crucial for a thriving farm. Our system can identify common diseases in cattle, sheep, and other animals by analyzing uploaded images. From skin infections to respiratory issues, we provide accurate insights and treatment recommendations, helping you ensure the well-being of your animals and maintain a productive herd.
-        """)
 with col6:
     st_lottie(
         lottie_cow,
@@ -358,7 +383,6 @@ with col6:
         height=250,
         width=250,
         key=None,
-    )   
+    )
 
-
-
+st.markdown("---")
