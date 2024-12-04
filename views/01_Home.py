@@ -109,6 +109,16 @@ livestock_cures = {
     'lumpy skin': google_search_link('lumpy skin cure')
 }
 
+cattle_names=['Foot and Mouth disease','Healthy','Lumpy Skin Disease']
+
+poultry_names=['cocci','healthy','ncd','salmo']
+
+pig_names=['Healthy','Infected_Bacterial_Erysipelas','Infected_Bacterial_Greasy_Pig_Disease','Infected_Environmental_Dermatitis','Infected_Environmental_Sunburn','Infected_Fungal_Pityriasis_Rosea','Infected_Fungal_Ringworm','Infected_Parasitic_Mange','Infected_Viral_Foot_and_Mouth_Disease','Infected_Viral_Swinepox']
+
+goat_names=[' boqueira',' mal do caroco']
+
+bee_names=['ant_problems','few_varrao_and_hive_beetles','healthy','hive_being_robbed','missing_queen','varroa_and_small_hive_beetles']
+
 def classify_image(uploaded_file, green_threshold=15):
     import cv2
     import numpy as np
