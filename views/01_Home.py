@@ -7,6 +7,7 @@ import joblib
 import json
 from tensorflow.keras.applications import VGG16
 from tensorflow.keras.preprocessing import image
+from tensorflow.keras.models import load_model
 import tempfile
 from streamlit_lottie import st_lottie
 from googletrans import Translator
@@ -204,12 +205,19 @@ def pig_model_prediction(test_image):
     return np.argmax(predictions)
 
 def goat_model_prediction(test_image):
-    model = tf.keras.models.load_model("goat_v1.keras")
-    image = tf.keras.preprocessing.image.load_img(test_image, target_size=(128,128))
-    input_arr = tf.keras.preprocessing.image.img_to_array(image)
-    input_arr = np.array([input_arr])  # convert single image to batch
-    predictions = model.predict(input_arr)
-    return np.argmax(predictions)
+    model = load_model('goat_v1.keras')
+    # Preprocess the image
+    img = image.load_img(test_image, target_size=(224, 224))  # Load image
+    img_array = image.img_to_array(img)                      # Convert to array
+    img_array = np.expand_dims(img_array, axis=0)            # Add batch dimension
+    img_array /= 255.0 
+
+    # Get predictions from the model
+    predictions = model.predict(img_array)[0]  # Get the first (and only) prediction
+
+    # Get the index of the maximum predicted value
+    max_index = np.argmax(predictions)
+    return max_index
 
 def bee_model_prediction(test_image):
     model = tf.keras.models.load_model("bee_v1.keras")
