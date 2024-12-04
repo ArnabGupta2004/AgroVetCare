@@ -295,13 +295,7 @@ if dr_ch == translate_text("LiveStock", selected_language):
                         #st.markdown(f"[{translate_text('Find Cure for', selected_language)} {predicted_disease}]({cure_link})")
                         
                         # Additional buttons
-                        # Working Button
-                        website_url = "https://agrovetcare-yqz3vvwra2bveydzyzqlsq.streamlit.app/Education"
-                        if st.button("Go to Disease Prediction"):
-                            # Redirect in the same tab by rendering a direct HTML link
-                            st.markdown(f"""
-                                <meta http-equiv="refresh" content="0; url={website_url}" />
-                                """, unsafe_allow_html=True)
+                        
                         with st.expander(translate_text("Know More", selected_language)):
                             st.markdown("[Know more about your disease](https://agrovetcare-yqz3vvwra2bveydzyzqlsq.streamlit.app/Education)")
                             
