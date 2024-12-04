@@ -10,13 +10,6 @@ from tensorflow.keras.preprocessing import image
 import tempfile
 from streamlit_lottie import st_lottie
 
-st.set_page_config(
-    page_title="AgroVet Care",       # Set the page title
-    layout="centered",                   # Use wide layout
-    initial_sidebar_state="collapsed"  # Sidebar starts collapsed (closed)
-)
-
-
 # Inject the CSS with st.markdown
 st.image("AgroVet Care_logo.png", use_column_width=True)
 
@@ -366,3 +359,6 @@ with col6:
         width=250,
         key=None,
     )   
+
+
+
