@@ -271,17 +271,33 @@ if dr_ch == translate_text("LiveStock", selected_language):
                 #yn = classify_image(test_image)
                 yn=1
                 if yn == 1:
-                    result_index = livestock_model_prediction(test_image)
-                    class_names = list(livestock_cures.keys())
-                    predicted_disease = class_names[result_index]
+                    if category == translate_text("Cattle", selected_language):
+                        result_index = cattle_model_prediction(test_image)
+                        predicted_disease = cattle_names[result_index]
+                    elif category == translate_text("Poultry", selected_language):
+                        result_index = poultry_model_prediction(test_image)
+                        predicted_disease = poultry_names[result_index]
+                    elif category == translate_text("Pig", selected_language):
+                        result_index = pig_model_prediction(test_image)
+                        predicted_disease = pig_names[result_index]
+                    elif category == translate_text("Goat", selected_language):
+                        result_index = goat_model_prediction(test_image)
+                        predicted_disease = goat_names[result_index]
+                    elif category == translate_text("Bees", selected_language):
+                        result_index = bee_model_prediction(test_image)
+                        predicted_disease = bee_names[result_index]
+                        
                     
                     # Check if predicted_disease is in livestock_cures
-                    if predicted_disease in livestock_cures:
-                        cure_link = livestock_cures[predicted_disease]
+                    if yn == 1:
+                        #cure_link = livestock_cures[predicted_disease]
                         st.success(f"""{translate_text("Model is predicting it's a", selected_language)} **{predicted_disease}**.""")
-                        st.markdown(f"[{translate_text('Find Cure for', selected_language)} {predicted_disease}]({cure_link})")
+                        #st.markdown(f"[{translate_text('Find Cure for', selected_language)} {predicted_disease}]({cure_link})")
                         
                         # Additional buttons
+                        with st.expander(translate_text("Know More", selected_language)):
+                            st.markdown("[Know more about your disease](https://agrovetcare-yqz3vvwra2bveydzyzqlsq.streamlit.app/Education)")
+                            
                         with st.expander(translate_text("Visit Marketplace", selected_language)):
                             st.markdown("[Visit Amazon Marketplace](https://www.amazon.in)")
 
