@@ -39,7 +39,7 @@ vet=st.Page(
     title="Nearby Vets",
 )
 
-app_mode= st.navigation(pages=[home,dr,we,vet,about])
+app_mode= st.navigation(pages=[home,about])
 app_mode.run()
 st.logo("AgroVet Care_logo.png")
 
