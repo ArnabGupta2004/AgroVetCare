@@ -4,7 +4,7 @@ input[type=text], input[type=email], textarea {
     padding: 5px; /* Some padding */
     background-color: #4a5549; /* Changed background color */
     color: #e8fae9; /* Text color to ensure visibility */ 
-    border: 1px solid #e8fae9; /* Gray border */
+    border: 1px solid #273026; /* Gray border */
     border-radius: 8px; /* Rounded borders */
     box-sizing: border-box; /* Make sure that padding and width stays in place */
     margin-top: 5px; /* Add a top margin */
