@@ -15,7 +15,7 @@ def local_css(file_name):
     with open(file_name) as f:
         st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
 
-local_css("styles/style.css")
+local_css("styles\style.css")
 
 home=st.Page(
     page="views/01_Home.py",
@@ -44,7 +44,7 @@ edu=st.Page(
     title="Education",
 )
 
-app_mode= st.navigation(pages=[home,edu,about])
+app_mode= st.navigation(pages=[home,dr,we,vet,edu,about])
 app_mode.run()
 st.logo("AgroVet Care_logo.png")
 
