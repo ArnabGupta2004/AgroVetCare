@@ -274,7 +274,8 @@ if dr_ch == translate_text("LiveStock", selected_language):
         st.image(test_image, width=200)
         if st.button(translate_text("Predict", selected_language)):
             with st.spinner(translate_text("Please Wait....", selected_language)):
-                yn = classify_image(test_image)
+                #yn = classify_image(test_image)
+                yn=1
                 if yn == 1:
                     result_index = livestock_model_prediction(test_image)
                     class_names = list(livestock_cures.keys())
