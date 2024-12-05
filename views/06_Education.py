@@ -219,142 +219,137 @@ if dr_ch == translate_text("Livestock", selected_language):
 
     # Livestock Diseases Data Structure
     livestock_diseases = {
-        'Cattle': {
-            "Foot and Mouth disease": {
+            "Cattle - Foot and Mouth disease": {
                 "description": "A highly contagious viral disease affecting cattle.",
                 "identification": "Fever, blisters in the mouth and feet.",
                 "precaution": "Vaccinate cattle and avoid contact with infected animals.",
                 "cure": "No cure, symptomatic treatment for fever."
             },
-            "Lumpy Skin Disease": {
+            "Cattle - Lumpy Skin Disease": {
                 "description": "A viral disease affecting cattle, causing lumps on the skin.",
                 "identification": "Lumps on the skin, fever, and swollen lymph nodes.",
                 "precaution": "Vaccinate cattle and isolate affected animals.",
                 "cure": "No specific cure, symptomatic treatment available."
-            }
-        },
-        'Poultry': {
-            "cocci": {
+            },
+
+            "Poultry - cocci": {
                 "description": "A parasitic infection caused by coccidia in poultry.",
                 "identification": "Diarrhea, dehydration, and loss of appetite.",
                 "precaution": "Maintain proper sanitation and provide clean water.",
                 "cure": "Use anticoccidial drugs and provide probiotics."
             },
-            "ncd": {
+
+            "Poultry - ncd": {
                 "description": "Newcastle Disease is a viral infection in poultry.",
                 "identification": "Neck twisting, paralysis, and sudden death.",
                 "precaution": "Vaccinate poultry and avoid contact with infected birds.",
                 "cure": "No cure, supportive treatment available."
             },
-            "salmo": {
+            "Poultry - salmo": {
                 "description": "Salmonella infection in poultry.",
                 "identification": "Diarrhea, lethargy, and fever.",
                 "precaution": "Keep poultry housing clean and avoid overcrowding.",
                 "cure": "Use antibiotics for treatment."
-            }
-        },
-        'Goat': {
-            "Boqueira": {
+            },
+
+            "Goat - Boqueira": {
                 "description": "A disease causing mouth ulcers in goats.",
                 "identification": "Blisters and sores in the mouth, drooling.",
                 "precaution": "Isolate infected animals and disinfect the area.",
                 "cure": "Use oral antiseptics and antibiotics."
             },
-            "Mal do caroco": {
+            "Goat - Mal do caroco": {
                 "description": "A parasitic disease causing swelling in the lymph nodes of goats.",
                 "identification": "Swollen lymph nodes, fever, and loss of appetite.",
                 "precaution": "Vaccinate goats and maintain proper hygiene.",
                 "cure": "Use antibiotics and supportive treatment."
-            }
-        },
-        'Pig': {
-            "Infected_Bacterial_Erysipelas": {
+            },
+
+            "Pig - Infected_Bacterial_Erysipelas": {
                 "description": "A bacterial infection causing high fever and skin lesions.",
                 "identification": "Fever, lesions, and sudden death in pigs.",
                 "precaution": "Vaccinate pigs and maintain clean pens.",
                 "cure": "Use antibiotics such as penicillin."
             },
-            "Infected_Bacterial_Greasy_Pig_Disease": {
+            "Pig - Infected_Bacterial_Greasy_Pig_Disease": {
                 "description": "A bacterial infection causing skin lesions and greasiness in pigs.",
                 "identification": "Oily skin, lesions, and diarrhea.",
                 "precaution": "Provide proper nutrition and clean housing.",
                 "cure": "Use antibiotics and topical treatments."
             },
-            "Infected_Environmental_Dermatitis": {
+            "Pig - Infected_Environmental_Dermatitis": {
                 "description": "Skin inflammation caused by poor environmental conditions.",
                 "identification": "Redness, irritation, and lesions on the skin.",
                 "precaution": "Improve living conditions and hygiene.",
                 "cure": "Use topical ointments and maintain clean environments."
             },
-            "Infected_Environmental_Sunburn": {
+            "Pig - Infected_Environmental_Sunburn": {
                 "description": "Skin damage caused by overexposure to the sun.",
                 "identification": "Red, inflamed skin, especially on ears and back.",
                 "precaution": "Provide shade and avoid prolonged sun exposure.",
                 "cure": "Use soothing ointments and ensure shade."
             },
-            "Infected_Fungal_Pityriasis_Rosea": {
+            "Pig - Infected_Fungal_Pityriasis_Rosea": {
                 "description": "A fungal infection causing skin lesions.",
                 "identification": "Red, circular patches on the skin.",
                 "precaution": "Maintain proper hygiene and avoid overcrowding.",
                 "cure": "Use antifungal treatments."
             },
-            "Infected_Fungal_Ringworm": {
+            "Pig - Infected_Fungal_Ringworm": {
                 "description": "A fungal infection affecting pigs' skin.",
                 "identification": "Circular, scaly lesions on the skin.",
                 "precaution": "Isolate affected pigs and disinfect the area.",
                 "cure": "Apply antifungal medications."
             },
-            "Infected_Parasitic_Mange": {
+            "Pig - Infected_Parasitic_Mange": {
                 "description": "A parasitic infection causing intense itching and hair loss.",
                 "identification": "Scratching, hair loss, and skin lesions.",
                 "precaution": "Use mite control treatments and disinfect the area.",
                 "cure": "Use acaricides and topical treatments."
             },
-            "Infected_Viral_Foot_and_Mouth_Disease": {
+            "Pig - Infected_Viral_Foot_and_Mouth_Disease": {
                 "description": "A viral infection causing fever and blisters on the feet and mouth.",
                 "identification": "Fever, blisters, and lameness.",
                 "precaution": "Vaccinate pigs and isolate infected animals.",
                 "cure": "No cure, symptomatic treatment available."
             },
-            "Infected_Viral_Swinepox": {
+            "Pig - Infected_Viral_Swinepox": {
                 "description": "A viral infection causing skin lesions.",
                 "identification": "Blisters and pustules on the skin.",
                 "precaution": "Vaccinate pigs and maintain good hygiene.",
                 "cure": "No specific cure, supportive care recommended."
-            }
-        },
-        'Bee': {
-            "ant_problems": {
+            },
+
+            "Bee - ant_problems": {
                 "description": "Ants invading the hive, disturbing the bees.",
                 "identification": "Ants around the hive entrance and inside the hive.",
                 "precaution": "Use ant traps and maintain hive cleanliness.",
                 "cure": "Remove ants manually and use natural repellents."
             },
-            "few_varrao_and_hive_beetles": {
+            "Bee - few_varrao_and_hive_beetles": {
                 "description": "A combination of varroa mites and hive beetles affecting bees.",
                 "identification": "Bees exhibiting stress, mites on the bees.",
                 "precaution": "Use chemical treatments and maintain hive hygiene.",
                 "cure": "Treat with miticides and beetle traps."
             },
-            "hive_being_robbed": {
+            "Bee - hive_being_robbed": {
                 "description": "Other bees robbing honey from a weak hive.",
                 "identification": "Increased activity at the hive entrance, dead bees outside.",
                 "precaution": "Increase hive strength and remove weak colonies.",
                 "cure": "Secure the hive and prevent entry of robbing bees."
             },
-            "missing_queen": {
+            "Bee - missing_queen": {
                 "description": "A situation where the bee queen is absent or dead.",
                 "identification": "No eggs in the hive and reduced bee activity.",
                 "precaution": "Monitor the queen's health and replace her if needed.",
                 "cure": "Introduce a new queen to the hive."
             },
-            "varroa_and_small_hive_beetles": {
+            "Bee - varroa_and_small_hive_beetles": {
                 "description": "Infection caused by varroa mites and small hive beetles.",
                 "identification": "Mites on bees and beetles in the hive.",
                 "precaution": "Use mite control measures and beetle traps.",
                 "cure": "Use miticides and beetle traps."
             }
-        }
     }
 
     cattle_diseases = {
@@ -502,6 +497,7 @@ if dr_ch == translate_text("Livestock", selected_language):
     livestock_type =st.selectbox(
         translate_text("Select Livestock Category:", selected_language),
         [
+            translate_text("All", selected_language),
             translate_text("Cattle", selected_language),
             translate_text("Poultry", selected_language),
             translate_text("Pig", selected_language),
@@ -511,7 +507,10 @@ if dr_ch == translate_text("Livestock", selected_language):
         index=0  # Set Cattle as the default option
     )
     
-    if livestock_type == translate_text("Cattle", selected_language):
+    if livestock_type == translate_text("All", selected_language):
+        disease_info = livestock_diseases
+
+    elif livestock_type == translate_text("Cattle", selected_language):
         disease_info = cattle_diseases
 
     elif livestock_type == translate_text("Poultry", selected_language):
