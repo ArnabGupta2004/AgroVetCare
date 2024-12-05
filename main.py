@@ -41,7 +41,7 @@ vet=st.Page(
 
 edu=st.Page(
     page="views/06_Education.py",
-    title="Education",
+    title="FarmHelp",
 )
 
 app_mode= st.navigation(pages=[home,edu,about])
