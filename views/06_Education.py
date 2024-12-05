@@ -202,7 +202,7 @@ if dr_ch == translate_text("Crop", selected_language):
     for disease, info in diseases_info.items():
         if search_query in disease.lower() or search_query == "":  # Matching the query against the disease names
             found_any = True
-            st.subheader(translate_text(disease.replace("___", " - "), selected_language))
+            st.subheader(translate_text(disease, selected_language))
             st.write(translate_text(f"**Description:** {info['description']}", selected_language))
             st.write(translate_text(f"**How to Identify:** {info['identification']}", selected_language))
             st.write(translate_text(f"**Precaution:** {info['precaution']}", selected_language))
