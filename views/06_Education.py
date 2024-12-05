@@ -197,11 +197,17 @@ if dr_ch == translate_text("Crop", selected_language):
     search_query = st.text_input(translate_text("Search for a disease", selected_language)).lower()
 
     # Display diseases based on search or show all
+    found_any = False  # Flag to check if any disease matched
+
     for disease, info in diseases_info.items():
-        if search_query in disease.lower() or search_query == "":
+        if search_query in disease.lower() or search_query == "":  # Matching the query against the disease names
+            found_any = True
             st.subheader(translate_text(disease.replace("___", " - "), selected_language))
             st.write(translate_text(f"**Description:** {info['description']}", selected_language))
             st.write(translate_text(f"**How to Identify:** {info['identification']}", selected_language))
             st.write(translate_text(f"**Precaution:** {info['precaution']}", selected_language))
             st.write(translate_text(f"**Cure:** {info['cure']}", selected_language))
             st.markdown("---")
+
+    if not found_any:
+        st.write(translate_text("No diseases found. Please try a different search term.", selected_language))
