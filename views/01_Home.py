@@ -23,8 +23,17 @@ with col0:
 
 with colt:
     # Display the language selection dropdown
-    languages = ['en', 'hi', 'mr', 'ta', 'te', 'bn', 'ur']
-    selected_language = st.selectbox("Select Language", languages)
+    languages = {
+    'en': 'English',
+    'hi': 'Hindi',
+    'mr': 'Marathi',
+    'ta': 'Tamil',
+    'te': 'Telugu',
+    'bn': 'Bengali',
+    'ur': 'Urdu'
+    }
+
+    selected_language = st.selectbox("Select Language", options=languages.keys(), format_func=lambda x: languages[x])
 
 # Function to translate text
 def translate_text(text, lang='en'):
