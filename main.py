@@ -9,6 +9,12 @@ st.set_page_config(
     initial_sidebar_state="collapsed"  # Sidebar starts collapsed (closed)
 )
 
+hide_footer_style = """
+    <style>
+    footer {visibility: hidden;}
+    </style>
+"""
+st.markdown(hide_footer_style, unsafe_allow_html=True)
 
 # Use Local CSS File
 def local_css(file_name):
