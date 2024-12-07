@@ -10,6 +10,12 @@ from tensorflow.keras.preprocessing import image
 import tempfile
 from streamlit_lottie import st_lottie
 
+hide_footer_style = """
+    <style>
+    footer {visibility: hidden;}
+    </style>
+"""
+st.markdown(hide_footer_style, unsafe_allow_html=True)
 
 # Inject the CSS with st.markdown
 st.image("AgroVet Care_logo.png", use_column_width=True)
