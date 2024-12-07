@@ -324,8 +324,15 @@ with col2:
         key=None,
     )
 
-col3,col4=st.columns([1,2],gap="small")
+col3,col4=st.columns([2,1],gap="small")
 with col3:
+    st.markdown("""
+    ### Crop Disease Prediction 🌿  
+    Our system leverages advanced AI models to detect diseases in a wide range of crops, including fruits, vegetables, and grains. Simply upload an image of the affected plant, and our system will analyze it to identify potential issues like fungal infections, bacterial diseases, or nutrient deficiencies. With accurate and fast predictions, you can take timely action to protect your crops and maximize your yield.       
+    """)
+    
+
+with col4:
     st_lottie(
         lottie_crop,
         speed=1,
@@ -336,12 +343,6 @@ with col3:
         width=250,
         key=None,
     )
-
-with col4:
-    st.markdown("""
-    ### Crop Disease Prediction 🌿  
-    Our system leverages advanced AI models to detect diseases in a wide range of crops, including fruits, vegetables, and grains. Simply upload an image of the affected plant, and our system will analyze it to identify potential issues like fungal infections, bacterial diseases, or nutrient deficiencies. With accurate and fast predictions, you can take timely action to protect your crops and maximize your yield.       
-    """)
 
 col5,col6=st.columns([2,1],gap="small")
 with col5:
