@@ -67,4 +67,4 @@ contact_form="""
 
 st.sidebar.markdown(contact_form, unsafe_allow_html=True)
 st.sidebar.markdown("---")
-st.sidebar.text("Made by Team Code&Conquer_TMSL")
+st.sidebar.text("Made by Team Code&ConquerTMSL")
