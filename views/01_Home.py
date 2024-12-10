@@ -8,6 +8,7 @@ import json
 from tensorflow.keras.applications import VGG16
 from tensorflow.keras.preprocessing import image
 import tempfile
+from tensorflow.keras.models import load_model
 from streamlit_lottie import st_lottie
 
 hide_footer_style = """
