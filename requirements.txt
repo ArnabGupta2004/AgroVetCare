@@ -21,3 +21,4 @@ scipy==1.11.3
 seaborn==0.13.2
 keras==3.5.0
 inference-sdk==0.9.17
+keras==3.5.0
