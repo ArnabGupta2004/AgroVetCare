@@ -50,7 +50,7 @@ edu=st.Page(
     title="FarmHelp",
 )
 
-app_mode= st.navigation(pages=[home,edu,about])
+app_mode= st.navigation(pages=[home,dr,edu,about])
 app_mode.run()
 st.logo("AgroVet Care_logo.png")
 
