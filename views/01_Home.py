@@ -12,6 +12,7 @@ from tensorflow.keras.preprocessing import image
 import tempfile
 from tensorflow.keras.models import load_model
 from streamlit_lottie import st_lottie
+import gdown
 
 hide_footer_style = """
     <style>
@@ -173,13 +174,41 @@ def crop_model_prediction(test_image):
 
     return predicted_index, confidence
 
+
+def download_model():
+    # Google Drive file ID for the livestock model
+    file_id = "170AlcSZ8ySuVnRExeT2hqKlZ8tEBGxnp"
+    model_url = f"https://drive.google.com/uc?id={file_id}"
+    model_path = "trained_livestock_disease_model.keras"
+
+    # Check if the model file already exists
+    if not os.path.exists(model_path):
+        print("Downloading the livestock disease model...")
+        gdown.download(model_url, model_path, quiet=False)
+    else:
+        print("Model already exists.")
+
+    return model_path
+
 def livestock_model_prediction(test_image):
-    model = load_model("trained_livestock_disease_model.keras")
-    image = tf.keras.preprocessing.image.load_img(test_image, target_size=(128,128))
+    # Ensure the model is downloaded
+    model_path = download_model()
+
+    # Load the model
+    model = load_model(model_path)
+
+    # Preprocess the input image
+    image = tf.keras.preprocessing.image.load_img(test_image, target_size=(128, 128))
     input_arr = tf.keras.preprocessing.image.img_to_array(image)
-    input_arr = np.array([input_arr])  # convert single image to batch
+    input_arr = np.array([input_arr])  # Convert single image to batch
+
+    # Make predictions
     predictions = model.predict(input_arr)
-    return np.argmax(predictions)  # return index of max element
+    return np.argmax(predictions)
+
+# Example usage
+# livestock_model_prediction("path_to_test_image.jpg")
+
 
 st.markdown(
     """
