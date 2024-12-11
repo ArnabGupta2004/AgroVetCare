@@ -49,7 +49,7 @@ cb=st.Page(
     title="Text Analysis",
 )
 
-app_mode= st.navigation(pages=[home,edu,dr,cb,about])
+app_mode= st.navigation(pages=[home,edu,dr,cb,vet,about])
 app_mode.run()
 st.logo("AgroVet Care_logo.png")
 
