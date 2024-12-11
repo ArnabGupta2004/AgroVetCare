@@ -23,11 +23,8 @@ with colt:
 
 # Function to translate text
 def translate_text(text, lang='en'):
-    try:
-        translated = translator.translate(text, dest=lang)
-        return translated.text
-    except Exception as e:
-        return text  # Return original text if translation fails
+    return text  # Return the original text if translation fails
+
 
 # Page description
 st.markdown(translate_text("FarmHelp offers quick insights on disease identification, prevention, and cures to help farmers maintain healthy crops and livestock.", selected_language))
