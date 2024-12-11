@@ -216,7 +216,7 @@ dr_ch = option_menu(
 
 if dr_ch == translate_text("LiveStock", selected_language):
 
-    st.header(translate_text("Livestock Disease Recognition", selected_language))
+    st.header(translate_text("Livestockss Disease Recognition", selected_language))
     st.write(translate_text("Choose Category:", selected_language))
 
     # Selectbox for category selection with Cattle as the default option
