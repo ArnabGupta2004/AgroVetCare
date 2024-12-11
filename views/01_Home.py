@@ -138,15 +138,38 @@ def classify_image(uploaded_file, green_threshold=15):
 
     return classification  
 
-trained_plant_disease_model = "./trained_livestock_disease_model.keras"
+#trained_plant_disease_model = "./trained_livestock_disease_model.keras"
+#def crop_model_prediction(test_image):
+#    model = load_model("trained_plant_disease_model.keras")
+#    image = tf.keras.preprocessing.image.load_img(test_image, target_size=(128,128))
+#    input_arr = tf.keras.preprocessing.image.img_to_array(image)
+#    input_arr = np.array([input_arr])  # convert single image to batch
+#    predictions = model.predict(input_arr)
+#    predicted_index = np.argmax(predictions)  # index of the predicted class
+#    confidence = predictions[0][predicted_index] * 100  # confidence in percentage
+#    return predicted_index, confidence
+
 def crop_model_prediction(test_image):
-    model = load_model("trained_plant_disease_model.keras")
-    image = tf.keras.preprocessing.image.load_img(test_image, target_size=(128,128))
+    # Adjusted file path for the model
+    model_path = "/mount/src/agrovetcare/trained_plant_disease_model.keras"
+
+    # Ensure the model file exists
+    if not os.path.exists(model_path):
+        raise FileNotFoundError(f"Model file not found at: {model_path}")
+
+    # Load the model
+    model = load_model(model_path)
+
+    # Preprocess the test image
+    image = tf.keras.preprocessing.image.load_img(test_image, target_size=(128, 128))
     input_arr = tf.keras.preprocessing.image.img_to_array(image)
-    input_arr = np.array([input_arr])  # convert single image to batch
+    input_arr = np.array([input_arr])  # Convert single image to batch
+
+    # Predict using the model
     predictions = model.predict(input_arr)
-    predicted_index = np.argmax(predictions)  # index of the predicted class
-    confidence = predictions[0][predicted_index] * 100  # confidence in percentage
+    predicted_index = np.argmax(predictions)  # Index of the predicted class
+    confidence = predictions[0][predicted_index] * 100  # Confidence in percentage
+
     return predicted_index, confidence
 
 def livestock_model_prediction(test_image):
