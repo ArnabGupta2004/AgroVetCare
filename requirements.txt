@@ -1,4 +1,4 @@
-streamlit==1.41.0
+streamlit==1.38.0
 requests==2.31.0
 datetime  # No specific version mentioned in the new list
 tensorflow==2.18.0
