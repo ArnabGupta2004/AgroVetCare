@@ -37,7 +37,12 @@ with colt:
 
 # Function to translate text
 def translate_text(text, lang='en'):
-    return text  # Return the original text if translation fails
+    try:
+        translated = translator.translate(text, dest=lang)
+        return translated.text
+    except Exception as e:
+        return text  # Return original text if translation fails
+
 
 # Translate content based on selected language
 #def translate_content():
