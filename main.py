@@ -9,19 +9,13 @@ st.set_page_config(
     initial_sidebar_state="collapsed"  # Sidebar starts collapsed (closed)
 )
 
-hide_footer_style = """
-    <style>
-    footer {visibility: hidden;}
-    </style>
-"""
-st.markdown(hide_footer_style, unsafe_allow_html=True)
 
 # Use Local CSS File
 def local_css(file_name):
     with open(file_name) as f:
         st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
 
-local_css("styles/style.css")
+local_css("styles\style.css")
 
 home=st.Page(
     page="views/01_Home.py",
@@ -50,7 +44,12 @@ edu=st.Page(
     title="FarmHelp",
 )
 
-app_mode= st.navigation(pages=[home,edu,dr,vet,about])
+cb=st.Page(
+    page="views/07_Chatbox.py",
+    title="Text Analysis",
+)
+
+app_mode= st.navigation(pages=[home,edu,dr,cb,about])
 app_mode.run()
 st.logo("AgroVet Care_logo.png")
 
