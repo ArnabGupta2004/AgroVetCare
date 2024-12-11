@@ -1,7 +1,6 @@
 import streamlit as st
 import tensorflow as tf
 import numpy as np
-import os
 from streamlit_option_menu import option_menu
 import urllib.parse
 import joblib
@@ -12,7 +11,6 @@ from tensorflow.keras.preprocessing import image
 import tempfile
 from tensorflow.keras.models import load_model
 from streamlit_lottie import st_lottie
-import gdown
 
 hide_footer_style = """
     <style>
@@ -140,75 +138,24 @@ def classify_image(uploaded_file, green_threshold=15):
 
     return classification  
 
-#trained_plant_disease_model = "./trained_livestock_disease_model.keras"
-#def crop_model_prediction(test_image):
-#    model = load_model("trained_plant_disease_model.keras")
-#    image = tf.keras.preprocessing.image.load_img(test_image, target_size=(128,128))
-#    input_arr = tf.keras.preprocessing.image.img_to_array(image)
-#    input_arr = np.array([input_arr])  # convert single image to batch
-#    predictions = model.predict(input_arr)
-#    predicted_index = np.argmax(predictions)  # index of the predicted class
-#    confidence = predictions[0][predicted_index] * 100  # confidence in percentage
-#    return predicted_index, confidence
-
+trained_plant_disease_model = "./trained_livestock_disease_model.keras"
 def crop_model_prediction(test_image):
-    # Adjusted file path for the model
-    model_path = "/mount/src/agrovetcare/trained_plant_disease_model.keras"
-
-    # Ensure the model file exists
-    if not os.path.exists(model_path):
-        raise FileNotFoundError(f"Model file not found at: {model_path}")
-
-    # Load the model
-    model = load_model(model_path)
-
-    # Preprocess the test image
-    image = tf.keras.preprocessing.image.load_img(test_image, target_size=(128, 128))
+    model = load_model("trained_plant_disease_model.keras")
+    image = tf.keras.preprocessing.image.load_img(test_image, target_size=(128,128))
     input_arr = tf.keras.preprocessing.image.img_to_array(image)
-    input_arr = np.array([input_arr])  # Convert single image to batch
-
-    # Predict using the model
+    input_arr = np.array([input_arr])  # convert single image to batch
     predictions = model.predict(input_arr)
-    predicted_index = np.argmax(predictions)  # Index of the predicted class
-    confidence = predictions[0][predicted_index] * 100  # Confidence in percentage
-
+    predicted_index = np.argmax(predictions)  # index of the predicted class
+    confidence = predictions[0][predicted_index] * 100  # confidence in percentage
     return predicted_index, confidence
 
-
-def download_model():
-    # Google Drive file ID for the livestock model
-    file_id = "170AlcSZ8ySuVnRExeT2hqKlZ8tEBGxnp"
-    model_url = f"https://drive.google.com/uc?id={file_id}"
-    model_path = "trained_livestock_disease_model.keras"
-
-    # Check if the model file already exists
-    if not os.path.exists(model_path):
-        print("Downloading the livestock disease model...")
-        gdown.download(model_url, model_path, quiet=False)
-    else:
-        print("Model already exists.")
-
-    return model_path
-
 def livestock_model_prediction(test_image):
-    # Ensure the model is downloaded
-    model_path = download_model()
-
-    # Load the model
-    model = load_model(model_path)
-
-    # Preprocess the input image
-    image = tf.keras.preprocessing.image.load_img(test_image, target_size=(128, 128))
+    model = load_model("trained_livestock_disease_model.keras")
+    image = tf.keras.preprocessing.image.load_img(test_image, target_size=(128,128))
     input_arr = tf.keras.preprocessing.image.img_to_array(image)
-    input_arr = np.array([input_arr])  # Convert single image to batch
-
-    # Make predictions
+    input_arr = np.array([input_arr])  # convert single image to batch
     predictions = model.predict(input_arr)
-    return np.argmax(predictions)
-
-# Example usage
-# livestock_model_prediction("path_to_test_image.jpg")
-
+    return np.argmax(predictions)  # return index of max element
 
 st.markdown(
     """
@@ -423,6 +370,5 @@ with col6:
         width=250,
         key=None,
     )   
-
 
 
