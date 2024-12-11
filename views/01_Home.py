@@ -257,15 +257,7 @@ if dr_ch == translate_text("LiveStock", selected_language):
                     elif category == translate_text("Poultry", selected_language):
                         result_index = poultry_model_prediction(test_image)
                         predicted_disease = poultry_names[result_index]
-                    elif category == translate_text("Pig", selected_language):
-                        result_index = pig_model_prediction(test_image)
-                        predicted_disease = pig_names[result_index]
-                    elif category == translate_text("Goat", selected_language):
-                        result_index = goat_model_prediction(test_image)
-                        predicted_disease = goat_names[result_index]
-                    elif category == translate_text("Bees", selected_language):
-                        result_index = bee_model_prediction(test_image)
-                        predicted_disease = bee_names[result_index]
+                    
                         
                     
                     # Check if predicted_disease is in livestock_cures
