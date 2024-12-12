@@ -351,14 +351,14 @@ if dr_ch == translate_text("LiveStock", selected_language):
         animals = ["cow", "buffalo", "sheep", "goat"]
 
         # Create a selectbox for animal input
-        any_animal_name = st.selectbox(translate_text("Select an Animal", selected_language), animals)
-        any_symptom_name = st.text_input(translate_text('Symptom', selected_language), '')
+        any_animal_name = st.selectbox(translate_text("Select an Animal", selected_language), animals,key="selectbox_animal")
+        any_symptom_name = st.text_input(translate_text('Symptom', selected_language), '',key="textbox_animal")
 
         animal_name = translate_text(any_animal_name, 'en')
         symptom_name = translate_text(any_symptom_name, 'en')
 
         # Prediction on button click
-        if st.button(translate_text('Predict', selected_language)):
+        if st.button(translate_text('Predict', selected_language),key="selectbox_button"):
             if animal_name and symptom_name:
                 predictions, predicted_disease = predict_disease(animal_name, symptom_name)
 
@@ -426,8 +426,158 @@ if dr_ch == translate_text("LiveStock", selected_language):
                 st.warning(translate_text("Please enter both animal name and symptom.", selected_language))
     # Tab 1: File Uploader (allows multiple file uploads)
     with tab2:
-        test_images = st.file_uploader(translate_text("Choose Images:", selected_language), type=["png", "jpg", "jpeg"], accept_multiple_files=True)
+        test_images = st.file_uploader(translate_text("Choose Images:", selected_language), type=["png", "jpg", "jpeg"], accept_multiple_files=True,key="selectbox_images")
     
+    with tab4:
+        st.write(translate_text("Enter the animal name and symptom to predict the disease:", selected_language))
+
+        # User inputs
+        animals = ["cow", "buffalo", "sheep", "goat"]
+        predicted_disease_names = []
+
+        # Create a selectbox for animal input
+        any_animal_name = st.selectbox(translate_text("Select an Animal", selected_language), animals)
+        any_symptom_name = st.text_input(translate_text('Symptom', selected_language), '')
+
+        animal_name = translate_text(any_animal_name, 'en')
+        symptom_name = translate_text(any_symptom_name, 'en')
+
+        # Prediction on button click
+        if st.button(translate_text('Predict', selected_language)):
+            if animal_name and symptom_name:
+                predictions, predicted_disease = predict_disease(animal_name, symptom_name)
+                
+                predicted_disease_names = predictions
+
+                st.write(translate_text("Possible diseases:", selected_language))
+                for prediction in predictions:
+                    st.write(prediction)
+
+                # Log the data to the Excel file
+                log_data(animal_name, symptom_name, predicted_disease)
+
+                with st.expander(translate_text("Know More", selected_language)):
+                    st.markdown("[Know more about your disease](https://agrovetcare-yqz3vvwra2bveydzyzqlsq.streamlit.app/Education)")
+
+                with st.expander(translate_text("Visit Marketplace", selected_language)):
+                    st.markdown("[Visit Amazon Marketplace](https://www.amazon.in)")
+
+                with st.expander(translate_text("Contact Experts", selected_language)):
+                    # Expert 1
+                    col1, col2 = st.columns([3, 1])  # 3:1 ratio for left and right columns
+                    with col1:
+                        st.markdown(f"""
+                        *Name*: Dr. Singh  
+                        *Contact*: [9876543211](tel:9876543211)  
+                        *Status*: :green[Online]  
+                        """)
+                        contact_form = f"""
+                        <form action="https://formsubmit.co/arnabgupta983@gmail.com" method="POST">
+                            <input type="hidden" name="_captcha" value="false">
+                            <input type="text" name="animal" value="{animal_name}" placeholder="{translate_text('Animal Name', selected_language)}" required>
+                            <input type="text" name="symptom" value="{symptom_name}" placeholder="{translate_text('Symptom', selected_language)}" required>
+                            <textarea name="message" placeholder="{translate_text('Tell your problem', selected_language)}"></textarea>
+                            <button type="submit">{translate_text('Send', selected_language)}</button>
+                        </form>
+                        """
+                        st.markdown(contact_form, unsafe_allow_html=True)
+
+                    with col2:
+                        st.image("manavatar.png", width=50)  # Adjust the width and image path
+
+                    st.markdown("---")  # Horizontal separator
+
+                    # Expert 2
+                    col1, col2 = st.columns([3, 1])  # 3:1 ratio for left and right columns
+                    with col1:
+                        st.markdown(f"""
+                            *Name*: Dr. Sharma  
+                            *Contact*: [1234567899](tel:1234567899)  
+                            *Status*: :red[Offline]  
+                            """)
+                        contact_form = f"""
+                        <form action="https://formsubmit.co/arnabgupta983@gmail.com" method="POST">
+                            <input type="hidden" name="_captcha" value="false">
+                            <input type="text" name="animal" value="{animal_name}" placeholder="{translate_text('Animal Name', selected_language)}" required>
+                            <input type="text" name="symptom" value="{symptom_name}" placeholder="{translate_text('Symptom', selected_language)}" required>
+                            <textarea name="message" placeholder="{translate_text('Tell your problem', selected_language)}"></textarea>
+                            <button type="submit">{translate_text('Send', selected_language)}</button>
+                        </form>
+                        """
+                        st.markdown(contact_form, unsafe_allow_html=True)
+
+                    with col2:
+                        st.image("womanavatar.png", width=50)  # Adjust the width and image path
+
+            else:
+                st.warning(translate_text("Please enter both animal name and symptom.", selected_language))
+
+        test_images = st.file_uploader(translate_text("Choose Images:", selected_language), type=["png", "jpg", "jpeg"], accept_multiple_files=True)
+        if test_images:
+            if len(test_images) > 5:
+                st.error(translate_text("You can upload up to 5 images only.", selected_language))
+                test_images = test_images[:5]  # Limit to 5 images
+            
+            for img in test_images:
+                st.image(img, width=200)
+
+            if st.button(translate_text("Predict for All Images", selected_language)):
+                with st.spinner(translate_text("Please Wait....", selected_language)):
+                    predicted_indices = []  # Store predicted indices for all images
+
+                    for img in test_images:
+                        if category == translate_text("Cattle", selected_language):
+                            result_probs, _ = cattle_model_prediction(img)
+                            predicted_indices.append(np.argmax(result_probs))
+                        elif category == translate_text("Poultry", selected_language):
+                            result_probs, _ = poultry_model_prediction(img)
+                            predicted_indices.append(np.argmax(result_probs))
+
+                    # Determine the most frequent predicted index
+                    most_frequent_index = max(set(predicted_indices), key=predicted_indices.count)
+
+                    # Determine the predicted disease
+                    if category == translate_text("Cattle", selected_language):
+                        predicted_disease = cattle_names[most_frequent_index]
+                    elif category == translate_text("Poultry", selected_language):
+                        predicted_disease = poultry_names[most_frequent_index]
+
+                    st.success(f"""{translate_text("Model is predicting it's a", selected_language)} **{predicted_disease}** based on the most frequent prediction.""")
+                    
+                    # Additional buttons and information
+                    with st.expander(translate_text("Know More", selected_language)):
+                        st.markdown("[Know more about your disease](https://agrovetcare-yqz3vvwra2bveydzyzqlsq.streamlit.app/Education)")
+                        
+                    with st.expander(translate_text("Visit Marketplace", selected_language)):
+                        st.markdown("[Visit Amazon Marketplace](https://www.amazon.in)")
+
+                    with st.expander(translate_text("Contact Experts", selected_language)):
+                        # Expert 1
+                        col1, col2 = st.columns([3, 1])  # 3:1 ratio for left and right columns
+                        with col1:
+                            st.markdown(f"""
+                            **Name**: Dr. Singh  
+                            **Contact**: [9876543211](tel:9876543211)  
+                            **Status**: :green[Online]  
+                            """)
+                        with col2:
+                            st.image("manavatar.png", width=50)  # Adjust the width and image path
+                        
+                        st.markdown("---")  # Horizontal separator
+                        
+                        # Expert 2
+                        col1, col2 = st.columns([3, 1])  # 3:1 ratio for left and right columns
+                        with col1:
+                            st.markdown(f"""
+                            **Name**: Dr. Sharma  
+                            **Contact**: [1234567899](tel:1234567899)  
+                            **Status**: :red[Offline]  
+                            """)
+                        with col2:
+                            st.image("womanavatar.png", width=50)  # Adjust the width and image path
+
+
+        st.write(predicted_disease_names)
     # Tab 2: Camera Input
     with tab3:
         st.write(translate_text("You can capture up to 5 images.", selected_language))
@@ -628,7 +778,7 @@ st.markdown("---")
 col5, col6 = st.columns([2, 1], gap="small")
 with col5:
     st.markdown(f"""
-    ### {translate_text('Livestocks Disease Prediction 🐄', selected_language)}  
+    ### {translate_text('Livestock Disease Prediction 🐄', selected_language)}  
     {translate_text('Keeping your livestock healthy is crucial for a thriving farm. Our system can identify common diseases in cattle, sheep, and other animals by analyzing uploaded images. From skin infections to respiratory issues, we provide accurate insights and treatment recommendations, helping you ensure the well-being of your animals and maintain a productive herd.', selected_language)}
     """)
 
