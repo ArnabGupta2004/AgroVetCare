@@ -13,7 +13,7 @@ streamlit-lottie==0.0.5
 json5  # No specific version mentioned in the new list
 urllib3  # No specific version mentioned in the new list
 pillow  # No specific version mentioned in the new list
-googletrans==4.0.0rc1
+googletrans==4.0.0-rc1
 folium==0.17.0
 matplotlib==3.8.0
 pandas==2.1.1
