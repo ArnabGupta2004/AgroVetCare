@@ -44,7 +44,17 @@ edu=st.Page(
     title="FarmHelp",
 )
 
-app_mode= st.navigation(pages=[home,dr,we,vet,edu,about])
+cb=st.Page(
+    page="views/07_Chatbox.py",
+    title="Chatbox",
+)
+acc = st.Page(
+    page="views/acc.py",
+    title="Account",
+)
+
+
+app_mode= st.navigation(pages=[home, edu, dr, cb, vet, we, about])
 app_mode.run()
 st.logo("AgroVet Care_logo.png")
 
