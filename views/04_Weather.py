@@ -1,13 +1,14 @@
+# Import necessary libraries
 import streamlit as st
 import requests
-import datetime
 
-# OpenWeather API key
-API_KEY = st.secrets["openweather"]["api_key"]
+# Set your OpenWeather and OpenCage API keys
+API_KEY = "6fa105bb23df102a78770e15ace55ffc"
+OPENCAGE_API_KEY = "6fa2229fd48f4b7f8a8fef3d55bbc35d"
 
 # Function to get latitude and longitude from city name
 def get_lat_lon_from_city(city):
-    geocode_url = f"https://api.opencagedata.com/geocode/v1/json?q={city}&key={st.secrets['opencage']['api_key']}"
+    geocode_url = f"https://api.opencagedata.com/geocode/v1/json?q={city}&key={OPENCAGE_API_KEY}"
     response = requests.get(geocode_url)
     data = response.json()
     if data['results']:
@@ -21,128 +22,112 @@ def get_lat_lon_from_city(city):
 def get_current_weather(lat, lon):
     url = f"http://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&appid={API_KEY}&units=metric"
     response = requests.get(url)
-    
-    if response.status_code != 200:
-        st.error(f"Error fetching current weather data: {response.status_code}")
-        return None
-    
-    return response.json()
+    if response.status_code == 200:
+        weather_data = response.json()
+        rainfall = weather_data.get('rain', {}).get('3h', None)  # Extract rainfall data (if available)
+        return weather_data, rainfall
+    else:
+        st.error(f"Error fetching weather data: {response.status_code}")
+        return None, None
 
-# Function to get 5-day weather forecast data
-def get_weather_forecast(lat, lon):
-    url = f"http://api.openweathermap.org/data/2.5/forecast?lat={lat}&lon={lon}&appid={API_KEY}&units=metric"
-    response = requests.get(url)
-    
-    if response.status_code != 200:
-        st.error(f"Error fetching forecast data: {response.status_code}")
-        return None
-    
-    return response.json()
+# Disease Mapping Based on Temperature, Humidity, and Rainfall
+disease_mapping = {
+    "hot_humid": {
+        "Crops": ["Powdery Mildew", "Leaf Spot", "Downy Mildew", "Bacterial Blight"],
+        "Livestock": ["Bovine Respiratory Disease", "Coccidiosis", "Heat Stress"]
+    },
+    "cold_humid": {
+        "Crops": ["Late Blight", "Clubroot", "Root Rot", "Bacterial Wilt"],
+        "Livestock": ["Pneumonia", "Foot Rot", "Blue Tongue Disease"]
+    },
+    "hot_dry": {
+        "Crops": ["Drought Stress", "Leaf Curl Virus", "Spider Mites"],
+        "Livestock": ["Heat Stress", "Tick-borne Diseases"]
+    },
+    "moderate_conditions": {
+        "Crops": ["Gray Mold", "Alternaria Blight", "Rust"],
+        "Livestock": ["Ringworm", "Pink Eye"]
+    },
+    "cold_dry": {
+        "Crops": ["Frost Damage", "Seedling Blight"],
+        "Livestock": ["Frostbite", "Respiratory Diseases"]
+    },
+    "high_rain_high_humidity": {
+        "Crops": ["Bacterial Blight", "Root Rot"],
+        "Livestock": ["Foot Rot"]
+    },
+    "low_rain_low_humidity": {
+        "Crops": ["Drought Stress", "Leaf Curl Virus"],
+        "Livestock": ["Heat Stress"]
+    }
+}
 
-# Function to check for severe weather alerts
-def check_for_severe_weather(forecast_data):
-    severe_conditions = ['storm', 'rain', 'thunderstorm', 'hail', 'snow']
-    alerts = []
+# Function to determine disease risks
+def get_possible_diseases(temp, humidity, wind_speed, rainfall):
+    if temp > 25 and humidity > 70:
+        return disease_mapping["hot_humid"]
+    elif temp < 20 and humidity > 80:
+        return disease_mapping["cold_humid"]
+    elif temp > 30 and humidity < 60:
+        return disease_mapping["hot_dry"]
+    elif 15 <= temp <= 25 and 50 <= humidity <= 70:
+        return disease_mapping["moderate_conditions"]
+    elif temp < 15 and humidity < 50:
+        return disease_mapping["cold_dry"]
+    elif rainfall > 50 and humidity > 70:
+        return disease_mapping["high_rain_high_humidity"]
+    elif rainfall < 20 and humidity < 60:
+        return disease_mapping["low_rain_low_humidity"]
+    else:
+        return {"Crops": ["No major risks detected"], "Livestock": ["No major risks detected"]}
 
-    for entry in forecast_data['list']:
-        weather_desc = entry['weather'][0]['description'].lower()
-        if any(condition in weather_desc for condition in severe_conditions):
-            date = datetime.datetime.fromtimestamp(entry['dt']).strftime('%d-%m-%Y %H:%M:%S')
-            alerts.append(f"On {date}: {weather_desc.title()}")
+# Function to display weather and disease predictions
+def display_weather_and_diseases(weather_data, rainfall, city):
+    temp = weather_data['main']['temp']
+    humidity = weather_data['main']['humidity']
+    wind_speed = weather_data['wind']['speed']
 
-    return alerts
-
-# Function to aggregate the 5-day 3-hour forecast into daily summaries
-def aggregate_daily_forecast(forecast_data):
-    daily_forecast = {}
-    
-    for entry in forecast_data['list']:
-        date = datetime.datetime.fromtimestamp(entry['dt']).strftime('%Y-%m-%d')
-        temp = entry['main']['temp']
-        weather_desc = entry['weather'][0]['description'].title()
-        icon_code = entry['weather'][0]['icon']
-
-        if date not in daily_forecast:
-            daily_forecast[date] = {
-                'temps': [temp],
-                'weather_desc': weather_desc,
-                'icon_code': icon_code
-            }
+    st.write(f"### Current Weather in {city}")
+    col1, col2, col3, col4 = st.columns(4)
+    with col1:
+        st.metric("Temperature (°C)", f"{temp}°C")
+    with col2:
+        st.metric("Humidity (%)", f"{humidity}%")
+    with col3:
+        st.metric("Wind Speed (m/s)", f"{wind_speed} m/s")
+    with col4:
+        if rainfall is not None:
+            st.metric("Rainfall (mm)", f"{rainfall} mm (last 3 hours)")
         else:
-            daily_forecast[date]['temps'].append(temp)
+            st.metric("Rainfall (mm)", "No Data")
 
-    # Calculate average temperature for each day
-    for date, data in daily_forecast.items():
-        data['avg_temp'] = sum(data['temps']) / len(data['temps'])
+    diseases = get_possible_diseases(temp, humidity, wind_speed, rainfall if rainfall else 0)
     
-    return daily_forecast
+    st.write("### Potential Diseases Based on Current Conditions")
+    colL,colC=st.columns(2)
+    with colL:
+        st.write("#### Livestock Diseases:")
+        for disease in diseases["Livestock"]:
+            st.write(f"- {disease}")
+    with colC:
+        st.write("#### Crop Diseases:")
+        for disease in diseases["Crops"]:
+            st.write(f"- {disease}")
 
-# Display weather data
-def display_forecast(forecast_data, city):
-    if forecast_data is None:
-        st.error("No forecast data available to display.")
-        return
+# Streamlit app logic
+st.title("Comprehensive Weather-Based Disease Predictor")
 
-    # Check for severe weather alerts
-    with st.expander("Upcoming Alerts"):
-        alerts = check_for_severe_weather(forecast_data)
-        
-        if alerts:
-            st.write("### Weather Alerts")
-            for alert in alerts:
-                st.write(alert)
-        else:
-            st.write("### No severe weather alerts in the forecast.")
-
-    # Display 5-day weather forecast
-    daily_forecast = aggregate_daily_forecast(forecast_data)
-    st.write(f"### 5-day Weather Forecast for {city}")
-    
-    for date, data in daily_forecast.items():
-        avg_temp = data['avg_temp']
-        weather_desc = data['weather_desc']
-        icon_code = data['icon_code']
-        icon_url = f"http://openweathermap.org/img/wn/{icon_code}@2x.png"
-        
-        st.write(f"**{date}**")
-        st.write(f"Average Temperature: {avg_temp:.2f}°C")
-        st.write(f"Weather: {weather_desc}")
-        st.image(icon_url)
-
-# Display current weather metrics
-def display_current_weather_metrics(current_weather, city):
-    if current_weather:
-        temperature = current_weather['main']['temp']
-        humidity = current_weather['main']['humidity']
-        wind_speed = current_weather['wind']['speed']
-        
-        st.write(f"### Current Weather in {city}")
-        
-        col1, col2, col3 = st.columns(3)
-        with col1:
-            st.metric("Temperature (°C)", f"{temperature}°C")
-        with col2:
-            st.metric("Humidity (%)", f"{humidity}%")
-        with col3:
-            st.metric("Wind Speed (m/s)", f"{wind_speed} m/s")
-
-# Streamlit app UI
-st.title("Weather Alerts")
-
-# User input for city
 city = st.text_input("Enter your city:")
-
-if st.button("Get Weather"):
+if st.button("Get Weather and Disease Predictions"):
     if city:
         lat, lon = get_lat_lon_from_city(city)
         if lat and lon:
-            current_weather = get_current_weather(lat, lon)
-            forecast_data = get_weather_forecast(lat, lon)
-            
-            if current_weather:
-                display_current_weather_metrics(current_weather, city)
-            display_forecast(forecast_data, city)
+            weather_data, rainfall = get_current_weather(lat, lon)
+            if weather_data:
+                display_weather_and_diseases(weather_data, rainfall, city)
+            else:
+                st.error("Unable to fetch weather data.")
         else:
-            st.error("Could not find location. Please enter a valid city.")
+            st.error("Invalid city. Please try again.")
     else:
-        st.warning("Please enter a city name.")
+        st.warning("Please enter a city.")
