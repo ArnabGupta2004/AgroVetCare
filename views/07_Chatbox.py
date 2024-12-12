@@ -6,6 +6,7 @@ from sklearn.preprocessing import OneHotEncoder, LabelEncoder
 import joblib
 import os
 from googletrans import Translator
+from tensorflow.keras.models import load_model
 
 translator = Translator()
 
@@ -23,15 +24,11 @@ selected_language = st.selectbox("Select Language", options=languages.keys(), fo
 
 # Function to translate text
 def translate_text(text, lang='en'):
-    try:
-        translated = translator.translate(text, dest=lang)
-        return translated.text
-    except Exception as e:
         return text  # Return original text if translation fails
 
 
 # Load the saved model
-model = tf.keras.models.load_model('disease_prediction_model.h5')
+model = load_model('disease_prediction_model_2.h5')
 
 # Load the encoders for animal and symptom
 animal_encoder = joblib.load('animal_encoder.pkl')  # Save your encoder with joblib
@@ -42,18 +39,28 @@ disease_encoder = joblib.load('disease_encoder.pkl')  # Save your encoder with j
 # Define the prediction function
 def predict_disease(animal_name, symptom_name):
     try:
-        # Convert animal name to the correct format (reshape to 2D)
-        animal_encoded = animal_encoder.transform([animal_name]).reshape(1, -1)
-    except ValueError:
-        # Handle unseen animal by using a vector of zeros with the correct length
-        animal_encoded = np.zeros((1, len(animal_encoder.classes_)))  # Zero-vector for unknown category
+        # Check if animal_name exists in encoder classes
+        if animal_name in animal_encoder.classes_:
+            animal_encoded = animal_encoder.transform([animal_name]).reshape(1, -1)
+        else:
+            # Handle unseen animal by using a zero-vector with the correct length
+            animal_encoded = np.zeros((1, len(animal_encoder.classes_)))  # Zero-vector for unknown category
+            st.warning(f"Unknown animal: {animal_name}. Using default encoding.")
+    except Exception as e:
+        st.error(f"Error processing animal: {e}")
+        animal_encoded = np.zeros((1, len(animal_encoder.classes_)))
 
     try:
-        # Convert symptom to the correct format (reshape to 2D)
-        symptom_encoded = symptom_encoder.transform([symptom_name]).reshape(1, -1)
-    except ValueError:
-        # Handle unseen symptom by using a vector of zeros with the correct length
-        symptom_encoded = np.zeros((1, len(symptom_encoder.classes_)))  # Zero-vector for unknown category
+        # Check if symptom_name exists in encoder classes
+        if symptom_name in symptom_encoder.classes_:
+            symptom_encoded = symptom_encoder.transform([symptom_name]).reshape(1, -1)
+        else:
+            # Handle unseen symptom by using a zero-vector with the correct length
+            symptom_encoded = np.zeros((1, len(symptom_encoder.classes_)))  # Zero-vector for unknown category
+            st.warning(f"Unknown symptom: {symptom_name}. Using default encoding.")
+    except Exception as e:
+        st.error(f"Error processing symptom: {e}")
+        symptom_encoded = np.zeros((1, len(symptom_encoder.classes_)))
 
     # Combine the encoded features (ensure both are 2D arrays and match the expected length)
     input_features = np.concatenate([animal_encoded, symptom_encoded], axis=1)  # (1, n_animal_features + n_symptom_features)
@@ -125,8 +132,8 @@ animals = ["cow", "buffalo", "sheep", "goat"]
 any_animal_name = st.selectbox(translate_text("Select an Animal", selected_language), animals)
 any_symptom_name = st.text_input(translate_text('Symptom', selected_language), '')
 
-animal_name=translate_text(any_animal_name, 'en')
-symptom_name=translate_text(any_symptom_name, 'en')
+animal_name = translate_text(any_animal_name, 'en')
+symptom_name = translate_text(any_symptom_name, 'en')
 
 # Prediction on button click
 if st.button(translate_text('Predict', selected_language)):
