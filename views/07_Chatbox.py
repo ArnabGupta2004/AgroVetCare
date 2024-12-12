@@ -23,10 +23,6 @@ selected_language = st.selectbox("Select Language", options=languages.keys(), fo
 
 # Function to translate text
 def translate_text(text, lang='en'):
-    try:
-        translated = translator.translate(text, dest=lang)
-        return translated.text
-    except Exception as e:
         return text  # Return original text if translation fails
 
 
