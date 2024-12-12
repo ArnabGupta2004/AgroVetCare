@@ -57,7 +57,7 @@ def predict_disease(animal_name, symptom_name):
         else:
             # Handle unseen symptom by using a zero-vector with the correct length
             symptom_encoded = np.zeros((1, len(symptom_encoder.classes_)))  # Zero-vector for unknown category
-            st.warning(f"Unknown symptom: {symptom_name}. Using default encoding.")
+            #st.warning(f"Unknown symptom: {symptom_name}. Using default encoding.")
     except Exception as e:
         st.error(f"Error processing symptom: {e}")
         symptom_encoded = np.zeros((1, len(symptom_encoder.classes_)))
