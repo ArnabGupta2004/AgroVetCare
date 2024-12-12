@@ -122,8 +122,11 @@ st.write(translate_text("Enter the animal name and symptom to predict the diseas
 animals = ["cow", "buffalo", "sheep", "goat"]
 
 # Create a selectbox for animal input
-animal_name = st.selectbox(translate_text("Select an Animal", selected_language), animals)
-symptom_name = st.text_input(translate_text('Symptom', selected_language), '')
+any_animal_name = st.selectbox(translate_text("Select an Animal", selected_language), animals)
+any_symptom_name = st.text_input(translate_text('Symptom', selected_language), '')
+
+animal_name=translate_text(any_animal_name, 'en')
+symptom_name=translate_text(any_symptom_name, 'en')
 
 # Prediction on button click
 if st.button(translate_text('Predict', selected_language)):
