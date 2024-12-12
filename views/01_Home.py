@@ -628,7 +628,7 @@ st.markdown("---")
 col5, col6 = st.columns([2, 1], gap="small")
 with col5:
     st.markdown(f"""
-    ### {translate_text('Livestock Disease Prediction 🐄', selected_language)}  
+    ### {translate_text('Livestocks Disease Prediction 🐄', selected_language)}  
     {translate_text('Keeping your livestock healthy is crucial for a thriving farm. Our system can identify common diseases in cattle, sheep, and other animals by analyzing uploaded images. From skin infections to respiratory issues, we provide accurate insights and treatment recommendations, helping you ensure the well-being of your animals and maintain a productive herd.', selected_language)}
     """)
 
